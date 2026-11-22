@@ -1,0 +1,12 @@
+node_modules/
+client/node_modules/
+client/dist/
+.env
+data/database.json
+data/.jwt_secret
+data/backups/
+uploads/resumes/*
+!uploads/resumes/.gitkeep
+*.log
+.DS_Store
+Thumbs.db

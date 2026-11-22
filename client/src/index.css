@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --flz-bg: #060709;
+    --flz-surface: #0c0e12;
+    --flz-surface-2: #12151c;
+    --flz-border: rgba(255, 255, 255, 0.08);
+    --flz-border-hover: rgba(255, 255, 255, 0.18);
+    --flz-accent: #00b8f4;
+    --flz-muted: #8a909e;
+  }
+
+  html {
+    background-color: var(--flz-bg);
+    color: #f5f7fa;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif;
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
+
+  body {
+    background-color: var(--flz-bg);
+    overflow-x: clip;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: 'Geist', 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    font-feature-settings: 'ss01', 'cv01';
+  }
+}
+
+/* Smooth infinite marquee */
+@keyframes flz-ticker {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-flz-ticker {
+  animation: flz-ticker 44s linear infinite;
+}
+
+.ticker-wrap:hover .animate-flz-ticker {
+  animation-play-state: paused;
+}
+
+/* Clean editorial line reveal mask */
+.line-mask {
+  overflow: hidden;
+  display: block;
+}
+
+/* Subtle refined scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #060709;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+/* Lenis integration */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Refined focus states */
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 0 0 3px rgba(0, 184, 244, 0.12);
+}
