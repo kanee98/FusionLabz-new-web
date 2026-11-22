@@ -66,7 +66,7 @@ app.use(
   })
 );
 
-// Public robots.txt (keeps crawlers out of private APIs & uploads)
+// Public robots.txt
 app.get('/robots.txt', (_req, res) => {
   res.type('text/plain').send('User-agent: *\nDisallow: /api/\nDisallow: /uploads/resumes/\n');
 });
@@ -87,7 +87,7 @@ app.use(
   })
 );
 
-// Explicitly block common guessable admin paths with 404 (stealth protection)
+// Explicitly block common guessable admin paths with 404
 app.all(
   ['/admin', '/admin/*', '/api/admin', '/api/admin/*', '/wp-admin', '/wp-login.php'],
   (_req, res) => {
@@ -95,12 +95,14 @@ app.all(
   }
 );
 
-// Health endpoint
-app.get('/api/health', (_req, res) => {
+// Health endpoint (also reports active DB engine & sanitized fallback hint if any)
+app.get('/api/health', async (_req, res) => {
+  await db.init();
   res.json({
     status: 'ok',
     service: 'FusionLabz Platform',
     database: db.engine,
+    ...(db.mysqlError ? { mysqlFallbackReason: db.mysqlError } : {}),
     timestamp: new Date().toISOString(),
   });
 });
@@ -110,9 +112,8 @@ app.use('/api/public', publicRoutes);
 app.use(config.ADMIN_API_BASE, adminRoutes);
 
 // Serve built React SPA
-if (fs.existsSync(config.CLIENT_DIST_DIR)) {
-  const indexPath = path.join(config.CLIENT_DIST_DIR, 'index.html');
-
+const indexPath = path.join(config.CLIENT_DIST_DIR, 'index.html');
+if (fs.existsSync(indexPath)) {
   app.use(
     express.static(config.CLIENT_DIST_DIR, {
       maxAge: '1d',
@@ -120,8 +121,7 @@ if (fs.existsSync(config.CLIENT_DIST_DIR)) {
     })
   );
 
-  // Secret Admin Console Route: Injects runtime gate ONLY on exact ADMIN_PATH match
-  // So the secret Admin URL is NEVER leaked inside the public JS bundle!
+  // Secret Admin Console Route: injects runtime gate ONLY on exact ADMIN_PATH match
   app.get([config.ADMIN_PATH, `${config.ADMIN_PATH}/*`], (_req, res) => {
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private');
     res.setHeader('X-Robots-Tag', 'noindex, nofollow');
@@ -139,8 +139,16 @@ if (fs.existsSync(config.CLIENT_DIST_DIR)) {
     return res.sendFile(indexPath);
   });
 } else {
-  app.get('/', (_req, res) => {
-    res.status(200).send('FusionLabz API online. Run "npm run build" to compile frontend.');
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api/') || req.path.startsWith('/uploads/')) {
+      return next();
+    }
+    res
+      .status(200)
+      .type('text/html')
+      .send(
+        '<!doctype html><html><body style="font-family:sans-serif;padding:40px"><h2>FusionLabz Server Online</h2><p>Frontend bundle (<code>client/dist</code>) not found. Push <code>client/dist</code> to Git or run <code>npm run build</code>.</p></body></html>'
+      );
   });
 }
 
@@ -153,18 +161,16 @@ app.use((err, _req, res, _next) => {
   return res.status(status).json({ error: err.message || 'Internal server error' });
 });
 
-async function start() {
-  try {
-    await db.init();
-    app.listen(config.PORT, () => {
-      console.log(`\n  [FusionLabz] Server online -> http://localhost:${config.PORT}`);
-      console.log(`  [FusionLabz] Mode: ${config.NODE_ENV} | Database: ${db.engine.toUpperCase()}`);
-      console.log(`  [FusionLabz] Private Console -> http://localhost:${config.PORT}${config.ADMIN_PATH}\n`);
-    });
-  } catch (err) {
-    console.error('[FusionLabz] Fatal startup error:', err);
-    process.exit(1);
-  }
-}
+// Warm up DB in background (never blocks Phusion Passenger's synchronous listen!)
+db.init().catch((err) => {
+  console.error('[FusionLabz] Background DB init warning:', err.message);
+});
 
-start();
+// IMPORTANT: Call app.listen() SYNCHRONOUSLY at module load so cPanel Phusion Passenger binds cleanly!
+const server = app.listen(config.PORT, () => {
+  console.log(`\n  [FusionLabz] Server online -> http://localhost:${config.PORT}`);
+  console.log(`  [FusionLabz] Mode: ${config.NODE_ENV}`);
+  console.log(`  [FusionLabz] Private Console -> ${config.ADMIN_PATH}\n`);
+});
+
+module.exports = server;

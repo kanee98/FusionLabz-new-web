@@ -127,13 +127,21 @@ const adapter = {
       user: config.MYSQL_CONFIG.user,
       password: config.MYSQL_CONFIG.password,
       waitForConnections: true,
-      connectionLimit: 8,
+      connectionLimit: 6,
       queueLimit: 0,
-      multipleStatements: true,
+      connectTimeout: 8000,
     });
 
+    // Execute each CREATE TABLE statement individually (works on all cPanel MariaDB/MySQL hosts)
     const schemaSql = fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8');
-    await pool.query(schemaSql);
+    const statements = schemaSql
+      .split(';')
+      .map((s) => s.replace(/--.*$/gm, '').trim())
+      .filter(Boolean);
+
+    for (const stmt of statements) {
+      await pool.query(stmt);
+    }
 
     // Seed initial FusionLabz data only if admin_users table is empty
     const [admins] = await pool.query('SELECT id FROM admin_users LIMIT 1');

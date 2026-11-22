@@ -51,12 +51,16 @@ Upload to your shared host (excluding `node_modules/` and `client/node_modules/`
 
 ---
 
-## 4. cPanel "Setup Node.js App" Settings
+## 4. cPanel "Setup Node.js App" Settings (Git Clone Method)
+
+Because `client/dist/` is committed to Git, you do **not** need to build Vite on shared hosting!
 
 1. **Node.js Version:** `20.x` or `22.x` LTS.
 2. **Application Mode:** `Production`.
-3. **Application Startup File:** `server.js`.
-4. Set environment variables (or upload `.env`):
+3. **Application Root:** `repositories/FusionLabz` (your cloned repo folder).
+4. **Application Startup File:** `server.js`.
+5. **Passenger Log File:** Set this to `logs/passenger.log` so any runtime logs are easily viewable in File Manager!
+6. Set Environment Variables in cPanel (or upload `.env` into `repositories/FusionLabz/.env`):
    - `NODE_ENV=production`
    - `ADMIN_PATH=/your-secret-portal-slug`
    - `JWT_SECRET=<your-96-char-random-hex>`
@@ -67,8 +71,9 @@ Upload to your shared host (excluding `node_modules/` and `client/node_modules/`
    - `DB_NAME=<cpanel_db_name>`
    - `DB_USER=<cpanel_db_user>`
    - `DB_PASSWORD=<cpanel_db_password>`
-5. Click **Run NPM Install** (pure JS deps only — no C++ compiler needed).
-6. Click **Start / Restart Application**.
+7. Click **SAVE**, then click **Run NPM Install** (installs only lightweight root backend packages — fast & low RAM).
+8. Click **RESTART**.
+9. Visit `https://fusionlabz.lk/api/health` to confirm `"status": "ok"` and `"database": "mysql"`!
 
 ---
 

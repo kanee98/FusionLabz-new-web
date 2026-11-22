@@ -8,10 +8,14 @@ const DATA_DIR = path.join(ROOT_DIR, 'data');
 const UPLOADS_DIR = path.join(ROOT_DIR, 'uploads');
 const CLIENT_DIST_DIR = path.join(ROOT_DIR, 'client', 'dist');
 
-fs.mkdirSync(DATA_DIR, { recursive: true });
-fs.mkdirSync(path.join(UPLOADS_DIR, 'projects'), { recursive: true });
-fs.mkdirSync(path.join(UPLOADS_DIR, 'clients'), { recursive: true });
-fs.mkdirSync(path.join(UPLOADS_DIR, 'resumes'), { recursive: true });
+try {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+  fs.mkdirSync(path.join(UPLOADS_DIR, 'projects'), { recursive: true });
+  fs.mkdirSync(path.join(UPLOADS_DIR, 'clients'), { recursive: true });
+  fs.mkdirSync(path.join(UPLOADS_DIR, 'resumes'), { recursive: true });
+} catch (err) {
+  console.warn('[FusionLabz Config] Directory setup warning:', err.message);
+}
 
 function resolveJwtSecret() {
   if (
@@ -22,15 +26,23 @@ function resolveJwtSecret() {
     return process.env.JWT_SECRET.trim();
   }
   const secretFile = path.join(DATA_DIR, '.jwt_secret');
-  if (fs.existsSync(secretFile)) {
-    const existing = fs.readFileSync(secretFile, 'utf8').trim();
-    if (existing.length >= 32) return existing;
+  try {
+    if (fs.existsSync(secretFile)) {
+      const existing = fs.readFileSync(secretFile, 'utf8').trim();
+      if (existing.length >= 32) return existing;
+    }
+  } catch {
+    // ignore read failure
   }
   const generated = crypto.randomBytes(48).toString('hex');
   try {
     fs.writeFileSync(secretFile, generated, { mode: 0o600 });
   } catch {
-    fs.writeFileSync(secretFile, generated);
+    try {
+      fs.writeFileSync(secretFile, generated);
+    } catch {
+      // Fallback to in-memory secret if filesystem is read-only
+    }
   }
   return generated;
 }
