@@ -1,9 +1,8 @@
 const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
-require('dotenv').config();
-
 const ROOT_DIR = path.resolve(__dirname, '..');
+require('dotenv').config({ path: path.join(ROOT_DIR, '.env') });
 const DATA_DIR = path.join(ROOT_DIR, 'data');
 const UPLOADS_DIR = path.join(ROOT_DIR, 'uploads');
 const CLIENT_DIST_DIR = path.join(ROOT_DIR, 'client', 'dist');
