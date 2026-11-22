@@ -15,7 +15,12 @@ import { AdminPortal } from './pages/admin/AdminLayout';
 
 function AppShell() {
   const location = useLocation();
-  const isAdmin = location.pathname.startsWith('/admin');
+  const portalGate = window.__FLZ_PORTAL__;
+  const isAdmin = Boolean(
+    portalGate?.enabled &&
+      portalGate.path &&
+      location.pathname.startsWith(portalGate.path)
+  );
   const isHome = location.pathname === '/';
 
   useLenis(!isAdmin);

@@ -1,15 +1,39 @@
 # Deploying FusionLabz on Shared Node.js Hosting (cPanel / Hostinger / Plesk)
 
-This platform is engineered specifically to run cleanly within shared Node.js hosting memory and runtime constraints:
-- **Single unified process** (`server.js`) serves both the compiled React production bundle (`client/dist`) and all Express REST APIs (`/api/*`).
-- **Zero native C++ addons** (`better-sqlite3`, `bcrypt`, `sharp` are intentionally avoided so `npm install` never fails due to missing `node-gyp` compilers on shared hosts).
-- **Atomic JSON database** (`data/database.json`) with serialized write locking works out of the box with zero external DB setup, plus one-click JSON backup inside `/admin`.
+This platform is launch-ready for shared Node.js hosting with **real MySQL database support** and **production-hardened security**.
 
 ---
 
-## 1. Local Build Before Uploading (Recommended)
+## 1. Database Setup (MySQL on cPanel / Shared Hosting)
 
-Build the production frontend locally so your shared hosting server doesn't hit RAM limits during Vite bundling:
+You do **not** need to run manual SQL migrations — once MySQL credentials are in `.env`, the server automatically creates all 8 tables (`server/schema.sql`) and seeds your real FusionLabz products, clients, and settings on first boot.
+
+1. Open **cPanel → MySQL Databases** (or **MySQL Database Wizard**).
+2. Create a database (e.g. `fusionla_web`) and a database user with a strong password.
+3. Add the user to the database with **ALL PRIVILEGES**.
+4. Enter `DB_HOST=localhost`, `DB_PORT=3306`, `DB_NAME`, `DB_USER`, and `DB_PASSWORD` in your `.env` (or cPanel Node App environment variables).
+
+> **Local Preview Fallback:** If `DB_HOST` is left blank (for example when testing locally on your PC), the server automatically uses its atomic JSON store (`data/database.json`) with zero setup.
+
+---
+
+## 2. Security Configuration (Important Before Going Live!)
+
+Never expose a guessable `/admin` URL. This platform enforces multi-layer security:
+- **Stealth Console Path (`ADMIN_PATH`):** Public `/admin` and `/api/admin/*` return `404 Not Found`. Your real console URL is set via `ADMIN_PATH` in `.env` (default: `/flz-console-84k2` — customize this to your own secret slug like `/flz-ops-93x7`). The secret path is never compiled into the public frontend JavaScript bundle.
+- **Brute-Force Lockout & Audit Log:** 5 consecutive failed logins lock that IP + email for 15 minutes and log the attempt inside **Settings → Security Audit Log**.
+- **CSRF + Cookie Hardening:** `httpOnly`, `SameSite=Strict`, `Secure` cookies (on HTTPS), plus strict Same-Origin CSRF checks on all state-changing admin requests.
+- **File Upload Protection:** Magic-byte signature verification blocks spoofed executables disguised as images or PDFs; resumes are stored privately outside static hosting and require admin authentication to download.
+- **Strict Headers:** Helmet Content-Security-Policy, `X-Frame-Options`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, and `robots.txt`.
+
+Generate a strong `JWT_SECRET` locally before deploying:
+```bash
+node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
+```
+
+---
+
+## 3. Build Locally Before Uploading (Recommended)
 
 ```bash
 npm install
@@ -17,47 +41,39 @@ npm --prefix client install
 npm run build
 ```
 
-This creates `client/dist/` containing the optimized static frontend.
-
----
-
-## 2. Files to Upload to Your Shared Host
-
-Upload the project folder (excluding `node_modules/` and `client/node_modules/`):
+Upload to your shared host (excluding `node_modules/` and `client/node_modules/`):
 - `server.js`
 - `package.json`
 - `server/`
 - `client/dist/`
 - `uploads/`
-- `.env` (create from `.env.example` with your own strong `JWT_SECRET` and `ADMIN_PASSWORD`)
-
-> **Important:** Keep `data/` and `uploads/` writable by your Node user so newly added projects, client logos, job listings, resumes, and inquiries persist across restarts.
+- `.env` (created from `.env.example`)
 
 ---
 
-## 3. cPanel "Setup Node.js App" Configuration
+## 4. cPanel "Setup Node.js App" Settings
 
-1. Open **cPanel → Setup Node.js App → Create Application**.
-2. **Node.js Version:** Select **18.x**, **20.x**, or **22.x** (Node 20 LTS recommended).
-3. **Application Mode:** `Production`.
-4. **Application Root:** Folder where you uploaded `server.js` (e.g. `fusionlabz`).
-5. **Application URL:** Your domain (e.g. `fusionlabz.lk`).
-6. **Application Startup File:** `server.js`.
-7. Add Environment Variables (or put them in `.env`):
+1. **Node.js Version:** `20.x` or `22.x` LTS.
+2. **Application Mode:** `Production`.
+3. **Application Startup File:** `server.js`.
+4. Set environment variables (or upload `.env`):
    - `NODE_ENV=production`
-   - `JWT_SECRET=<generate-a-64-char-random-string>`
-   - `ADMIN_EMAIL=admin@fusionlabz.lk`
+   - `ADMIN_PATH=/your-secret-portal-slug`
+   - `JWT_SECRET=<your-96-char-random-hex>`
+   - `ADMIN_EMAIL=connect@fusionlabz.lk`
    - `ADMIN_PASSWORD=<your-strong-password>`
-8. Click **Run NPM Install** (installs only lightweight root backend dependencies — fast & low RAM!).
-9. Click **Start / Restart Application**.
+   - `ALLOWED_ORIGIN=https://fusionlabz.lk`
+   - `DB_HOST=localhost`
+   - `DB_NAME=<cpanel_db_name>`
+   - `DB_USER=<cpanel_db_user>`
+   - `DB_PASSWORD=<cpanel_db_password>`
+5. Click **Run NPM Install** (pure JS deps only — no C++ compiler needed).
+6. Click **Start / Restart Application**.
 
 ---
 
-## 4. Admin Portal Access
+## 5. Accessing Your Private Admin Console
 
-- Visit: `https://yourdomain.com/admin`
-- Default initial credentials (if not overridden in `.env`):
-  - **Email:** `admin@fusionlabz.lk`
-  - **Password:** `FusionAdmin@2026`
-- Immediately change your password under **Admin Portal → Site & Security** after first login.
-- Optional: Enter your shared hosting SMTP credentials under **Admin Portal → Site & Security** to receive email alerts whenever a Contact Inquiry or Job Application is submitted.
+- Navigate directly to: `https://yourdomain.com<ADMIN_PATH>` (default locally: `http://localhost:3000/flz-console-84k2`).
+- Bookmark this URL privately — there are zero public links to it on the website.
+- Add your **WhatsApp number** and optional **SMTP settings** under **Site & Security** inside the console.

@@ -20,10 +20,11 @@ import {
   X,
 } from 'lucide-react';
 import { BrandLogo } from '../../components/BrandLogo';
-import { adminApi, getStoredToken } from '../../lib/api';
+import { adminApi, getAdminApiBase, getStoredToken } from '../../lib/api';
 import type {
   AdminUser,
   Application,
+  AuditLog,
   Client,
   DashboardData,
   Inquiry,
@@ -57,6 +58,9 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
   const [applications, setApplications] = useState<Application[]>([]);
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
+  const [storageEngine, setStorageEngine] = useState<'mysql' | 'json'>('json');
+  const [adminPath, setAdminPath] = useState('');
+  const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
 
   const [editingProject, setEditingProject] = useState<Partial<Project> | null>(null);
   const [editingClient, setEditingClient] = useState<Partial<Client> | null>(null);
@@ -84,6 +88,9 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
     setApplications(appRes.applications);
     setInquiries(inqRes.inquiries);
     setSiteSettings(setRes.settings);
+    setStorageEngine(setRes.storageEngine || 'json');
+    setAdminPath(setRes.adminPath || '');
+    setAuditLogs(setRes.auditLogs || []);
   }, []);
 
   useEffect(() => {
@@ -288,8 +295,8 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
               type="button"
               onClick={() =>
                 setEditingJob({
-                  department: 'Core Engineering',
-                  location: 'Colombo, Sri Lanka',
+                  department: 'Engineering',
+                  location: 'Kandy, Sri Lanka',
                   workMode: 'Hybrid',
                   employmentType: 'Full-time',
                   experience: '2+ Years',
@@ -603,8 +610,8 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
                   type="button"
                   onClick={() =>
                     setEditingJob({
-                      department: 'Core Engineering',
-                      location: 'Colombo, Sri Lanka',
+                      department: 'Engineering',
+                      location: 'Kandy, Sri Lanka',
                       workMode: 'Hybrid',
                       employmentType: 'Full-time',
                       experience: '2+ Years',
@@ -756,6 +763,9 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
             <SettingsPanel
               settings={siteSettings}
               admin={admin}
+              storageEngine={storageEngine}
+              adminPath={adminPath}
+              auditLogs={auditLogs}
               onSaved={async (msg) => refreshAfterMutation(msg)}
               onAdminUpdated={(next) => setAdmin(next)}
               onError={(msg) => notify(msg, 'err')}
@@ -836,7 +846,7 @@ function ApplicationCard({
   const token = getStoredToken();
 
   const downloadResume = async () => {
-    const res = await fetch(`/api/admin/applications/${app.id}/resume`, {
+    const res = await fetch(`${getAdminApiBase()}/applications/${app.id}/resume`, {
       credentials: 'include',
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
@@ -1171,6 +1181,8 @@ function ProjectEditorModal({
                 onChange={(e) => setCategory(e.target.value)}
                 className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2.5 text-[#09152B]"
               >
+                <option value="AI & Computer Vision">AI & Computer Vision</option>
+                <option value="Windows Desktop Software">Windows Desktop Software</option>
                 <option value="Enterprise Software">Enterprise Software</option>
                 <option value="Web & SaaS">Web & SaaS</option>
                 <option value="Mobile Apps">Mobile Apps</option>
@@ -1588,8 +1600,8 @@ function JobEditorModal({
   ) => Promise<void>;
 }) {
   const [title, setTitle] = useState(initial.title || '');
-  const [department, setDepartment] = useState(initial.department || 'Core Engineering');
-  const [location, setLocation] = useState(initial.location || 'Colombo, Sri Lanka');
+  const [department, setDepartment] = useState(initial.department || 'Engineering');
+  const [location, setLocation] = useState(initial.location || 'Kandy, Sri Lanka');
   const [workMode, setWorkMode] = useState(initial.workMode || 'Hybrid');
   const [employmentType, setEmploymentType] = useState(initial.employmentType || 'Full-time');
   const [experience, setExperience] = useState(initial.experience || '2+ Years');
@@ -1805,12 +1817,18 @@ function JobEditorModal({
 function SettingsPanel({
   settings,
   admin,
+  storageEngine,
+  adminPath,
+  auditLogs,
   onSaved,
   onAdminUpdated,
   onError,
 }: {
   settings: SiteSettings;
   admin: AdminUser;
+  storageEngine: 'mysql' | 'json';
+  adminPath: string;
+  auditLogs: AuditLog[];
   onSaved: (msg: string) => Promise<void>;
   onAdminUpdated: (u: AdminUser) => void;
   onError: (msg: string) => void;
@@ -1823,7 +1841,7 @@ function SettingsPanel({
 
   const downloadBackup = async () => {
     const token = getStoredToken();
-    const res = await fetch('/api/admin/backup', {
+    const res = await fetch(`${getAdminApiBase()}/backup`, {
       credentials: 'include',
       headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
@@ -1838,205 +1856,294 @@ function SettingsPanel({
   };
 
   return (
-    <div className="grid gap-8 lg:grid-cols-12">
-      <form
-        onSubmit={async (e) => {
-          e.preventDefault();
-          try {
-            await adminApi.updateSettings(form);
-            await onSaved('Company settings updated live.');
-          } catch (err) {
-            onError(err instanceof Error ? err.message : 'Save failed.');
-          }
-        }}
-        className="space-y-6 rounded-2xl border border-[#DCE8FA] bg-white p-6 shadow-sm lg:col-span-7"
-      >
-        <h2 className="font-display text-lg font-semibold text-[#09152B]">
-          Company Profile & Contact Details
-        </h2>
-
-        <div className="grid gap-4 sm:grid-cols-2">
-          <div>
-            <label className="mb-1 block text-xs font-medium text-[#334155]">Company Name</label>
-            <input
-              value={form.companyName}
-              onChange={(e) => setForm({ ...form, companyName: e.target.value })}
-              className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
+    <div className="space-y-8">
+      {/* Storage & Security Status Strip */}
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="rounded-2xl border border-[#DCE8FA] bg-white p-5 shadow-sm">
+          <div className="text-xs font-medium text-[#52627A]">Active Database Engine</div>
+          <div className="mt-1.5 flex items-center gap-2">
+            <span
+              className={`h-2.5 w-2.5 rounded-full ${
+                storageEngine === 'mysql' ? 'bg-emerald-500' : 'bg-[#0052FF]'
+              }`}
             />
+            <span className="font-display text-base font-semibold text-[#09152B]">
+              {storageEngine === 'mysql' ? 'MySQL Relational Database' : 'Local Atomic JSON Store'}
+            </span>
           </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-[#334155]">Contact Email</label>
-            <input
-              value={form.email}
-              onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-[#334155]">Phone / WhatsApp</label>
-            <input
-              value={form.phone}
-              onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-[#334155]">Global Presence</label>
-            <input
-              value={form.globalReach}
-              onChange={(e) => setForm({ ...form, globalReach: e.target.value })}
-              className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="mb-1 block text-xs font-medium text-[#334155]">
-            Headquarters Address
-          </label>
-          <input
-            value={form.address}
-            onChange={(e) => setForm({ ...form, address: e.target.value })}
-            className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
-          />
-        </div>
-
-        <div className="border-t border-slate-100 pt-5">
-          <h3 className="font-display text-sm font-semibold text-[#09152B]">
-            Optional SMTP Email Alerts
-          </h3>
           <p className="mt-1 text-xs text-[#52627A]">
-            Configure your shared hosting SMTP credentials to receive instant emails on new
-            inquiries or job applications.
+            {storageEngine === 'mysql'
+              ? 'Connected to MySQL pool with automatic relational persistence.'
+              : 'Set DB_HOST, DB_NAME, DB_USER, and DB_PASSWORD in .env on shared hosting to switch to MySQL automatically.'}
           </p>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <input
-              placeholder="SMTP Host (e.g. mail.fusionlabz.lk)"
-              value={form.smtp?.host || ''}
-              onChange={(e) =>
-                setForm({ ...form, smtp: { ...(form.smtp as any), host: e.target.value } })
-              }
-              className="rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B]"
-            />
-            <input
-              placeholder="SMTP Port (587 or 465)"
-              type="number"
-              value={form.smtp?.port || 587}
-              onChange={(e) =>
-                setForm({ ...form, smtp: { ...(form.smtp as any), port: Number(e.target.value) } })
-              }
-              className="rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B]"
-            />
-            <input
-              placeholder="SMTP Username"
-              value={form.smtp?.user || ''}
-              onChange={(e) =>
-                setForm({ ...form, smtp: { ...(form.smtp as any), user: e.target.value } })
-              }
-              className="rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B]"
-            />
-            <input
-              placeholder="SMTP Password"
-              type="password"
-              value={form.smtp?.pass || ''}
-              onChange={(e) =>
-                setForm({ ...form, smtp: { ...(form.smtp as any), pass: e.target.value } })
-              }
-              className="rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B]"
-            />
-            <input
-              placeholder="Notification Recipient Email"
-              value={form.smtp?.notifyEmail || ''}
-              onChange={(e) =>
-                setForm({ ...form, smtp: { ...(form.smtp as any), notifyEmail: e.target.value } })
-              }
-              className="rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B] sm:col-span-2"
-            />
-          </div>
         </div>
 
-        <button
-          type="submit"
-          className="rounded-xl bg-[#0052FF] px-6 py-2.5 text-xs font-semibold text-white shadow-sm hover:bg-[#0040CC]"
-        >
-          Save Settings
-        </button>
-      </form>
+        <div className="rounded-2xl border border-[#DCE8FA] bg-white p-5 shadow-sm">
+          <div className="text-xs font-medium text-[#52627A]">Stealth Console Route</div>
+          <div className="mt-1.5 font-display text-base font-semibold text-[#0052FF]">
+            {adminPath || 'Hidden'}
+          </div>
+          <p className="mt-1 text-xs text-[#52627A]">
+            Public /admin is blocked (404). Change ADMIN_PATH in .env anytime to rotate your secret URL.
+          </p>
+        </div>
+      </div>
 
-      <div className="space-y-6 lg:col-span-5">
+      <div className="grid gap-8 lg:grid-cols-12">
         <form
           onSubmit={async (e) => {
             e.preventDefault();
             try {
-              const res = await adminApi.updateCredentials({
-                currentPassword,
-                newPassword: newPassword || undefined,
-                newEmail,
-                newName,
-              });
-              onAdminUpdated(res.admin);
-              setCurrentPassword('');
-              setNewPassword('');
-              await onSaved('Admin credentials updated.');
+              await adminApi.updateSettings(form);
+              await onSaved('Company settings updated live.');
             } catch (err) {
-              onError(err instanceof Error ? err.message : 'Unable to update credentials.');
+              onError(err instanceof Error ? err.message : 'Save failed.');
             }
           }}
-          className="space-y-4 rounded-2xl border border-[#DCE8FA] bg-white p-6 shadow-sm"
+          className="space-y-6 rounded-2xl border border-[#DCE8FA] bg-white p-6 shadow-sm lg:col-span-7"
         >
           <h2 className="font-display text-lg font-semibold text-[#09152B]">
-            Admin Credentials & Security
+            Company Profile, Socials & Contact
           </h2>
-          <input
-            value={newName}
-            onChange={(e) => setNewName(e.target.value)}
-            placeholder="Admin Display Name"
-            className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
-          />
-          <input
-            type="email"
-            value={newEmail}
-            onChange={(e) => setNewEmail(e.target.value)}
-            placeholder="Admin Login Email"
-            className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
-          />
-          <input
-            type="password"
-            required
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-            placeholder="Current Password (required)"
-            className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
-          />
-          <input
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="New Password (min 8 chars, optional)"
-            className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
-          />
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Company Name</label>
+              <input
+                value={form.companyName}
+                onChange={(e) => setForm({ ...form, companyName: e.target.value })}
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Contact Email</label>
+              <input
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Phone Number</label>
+              <input
+                value={form.phone}
+                onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                placeholder="+94 77 000 0000"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">WhatsApp Number</label>
+              <input
+                value={form.whatsapp}
+                onChange={(e) => setForm({ ...form, whatsapp: e.target.value })}
+                placeholder="+94 77 000 0000"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label className="mb-1 block text-xs font-medium text-[#334155]">Location</label>
+            <input
+              value={form.address}
+              onChange={(e) => setForm({ ...form, address: e.target.value })}
+              className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
+            />
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Facebook URL</label>
+              <input
+                value={form.facebook || ''}
+                onChange={(e) => setForm({ ...form, facebook: e.target.value })}
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-xs text-[#09152B]"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Instagram URL</label>
+              <input
+                value={form.instagram || ''}
+                onChange={(e) => setForm({ ...form, instagram: e.target.value })}
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-xs text-[#09152B]"
+              />
+            </div>
+          </div>
+
+          <div className="border-t border-slate-100 pt-5">
+            <h3 className="font-display text-sm font-semibold text-[#09152B]">
+              Optional SMTP Email Alerts
+            </h3>
+            <p className="mt-1 text-xs text-[#52627A]">
+              Configure your shared hosting SMTP credentials to receive instant emails on new
+              inquiries or job applications.
+            </p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              <input
+                placeholder="SMTP Host (e.g. mail.fusionlabz.lk)"
+                value={form.smtp?.host || ''}
+                onChange={(e) =>
+                  setForm({ ...form, smtp: { ...(form.smtp as any), host: e.target.value } })
+                }
+                className="rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B]"
+              />
+              <input
+                placeholder="SMTP Port (587 or 465)"
+                type="number"
+                value={form.smtp?.port || 587}
+                onChange={(e) =>
+                  setForm({ ...form, smtp: { ...(form.smtp as any), port: Number(e.target.value) } })
+                }
+                className="rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B]"
+              />
+              <input
+                placeholder="SMTP Username"
+                value={form.smtp?.user || ''}
+                onChange={(e) =>
+                  setForm({ ...form, smtp: { ...(form.smtp as any), user: e.target.value } })
+                }
+                className="rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B]"
+              />
+              <input
+                placeholder="SMTP Password"
+                type="password"
+                value={form.smtp?.pass || ''}
+                onChange={(e) =>
+                  setForm({ ...form, smtp: { ...(form.smtp as any), pass: e.target.value } })
+                }
+                className="rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B]"
+              />
+              <input
+                placeholder="Notification Recipient Email"
+                value={form.smtp?.notifyEmail || ''}
+                onChange={(e) =>
+                  setForm({ ...form, smtp: { ...(form.smtp as any), notifyEmail: e.target.value } })
+                }
+                className="rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B] sm:col-span-2"
+              />
+            </div>
+          </div>
+
           <button
             type="submit"
-            className="w-full rounded-xl bg-[#EFF6FF] py-2.5 text-xs font-semibold text-[#0052FF] hover:bg-[#0052FF] hover:text-white"
+            className="rounded-xl bg-[#0052FF] px-6 py-2.5 text-xs font-semibold text-white shadow-sm hover:bg-[#0040CC]"
           >
-            Update Credentials
+            Save Settings
           </button>
         </form>
 
-        <div className="rounded-2xl border border-[#DCE8FA] bg-white p-6 shadow-sm">
-          <h3 className="font-display text-base font-semibold text-[#09152B]">Database Backup</h3>
-          <p className="mt-1.5 text-xs text-[#52627A]">
-            Export a full portable JSON snapshot of your projects, clients, jobs, applications, and
-            inquiries.
-          </p>
-          <button
-            type="button"
-            onClick={downloadBackup}
-            className="mt-4 inline-flex items-center gap-2 rounded-xl border border-[#DCE8FA] bg-[#F8FBFF] px-4 py-2.5 text-xs font-semibold text-[#0052FF] hover:border-[#0052FF]"
+        <div className="space-y-6 lg:col-span-5">
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              try {
+                const res = await adminApi.updateCredentials({
+                  currentPassword,
+                  newPassword: newPassword || undefined,
+                  newEmail,
+                  newName,
+                });
+                onAdminUpdated(res.admin);
+                setCurrentPassword('');
+                setNewPassword('');
+                await onSaved('Admin credentials updated.');
+              } catch (err) {
+                onError(err instanceof Error ? err.message : 'Unable to update credentials.');
+              }
+            }}
+            className="space-y-4 rounded-2xl border border-[#DCE8FA] bg-white p-6 shadow-sm"
           >
-            <Download className="h-4 w-4" />
-            Download JSON Backup
-          </button>
+            <h2 className="font-display text-lg font-semibold text-[#09152B]">
+              Admin Credentials & Security
+            </h2>
+            <input
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              placeholder="Admin Display Name"
+              className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
+            />
+            <input
+              type="email"
+              value={newEmail}
+              onChange={(e) => setNewEmail(e.target.value)}
+              placeholder="Admin Login Email"
+              className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
+            />
+            <input
+              type="password"
+              required
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              placeholder="Current Password (required)"
+              className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
+            />
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="New Password (min 10 chars, optional)"
+              className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
+            />
+            <button
+              type="submit"
+              className="w-full rounded-xl bg-[#EFF6FF] py-2.5 text-xs font-semibold text-[#0052FF] hover:bg-[#0052FF] hover:text-white"
+            >
+              Update Credentials
+            </button>
+          </form>
+
+          <div className="rounded-2xl border border-[#DCE8FA] bg-white p-6 shadow-sm">
+            <h3 className="font-display text-base font-semibold text-[#09152B]">Database Backup</h3>
+            <p className="mt-1.5 text-xs text-[#52627A]">
+              Export a full portable JSON snapshot of your projects, clients, jobs, applications,
+              and inquiries.
+            </p>
+            <button
+              type="button"
+              onClick={downloadBackup}
+              className="mt-4 inline-flex items-center gap-2 rounded-xl border border-[#DCE8FA] bg-[#F8FBFF] px-4 py-2.5 text-xs font-semibold text-[#0052FF] hover:border-[#0052FF]"
+            >
+              <Download className="h-4 w-4" />
+              Download JSON Backup
+            </button>
+          </div>
+
+          <div className="rounded-2xl border border-[#DCE8FA] bg-white p-6 shadow-sm">
+            <h3 className="font-display text-base font-semibold text-[#09152B]">
+              Security Audit Log
+            </h3>
+            <div className="mt-3 max-h-56 space-y-2 overflow-y-auto text-xs">
+              {auditLogs.length === 0 ? (
+                <p className="text-slate-400">No security events recorded yet.</p>
+              ) : (
+                auditLogs.map((log) => (
+                  <div
+                    key={log.id}
+                    className="flex items-start justify-between gap-2 rounded-lg bg-[#F8FBFF] px-3 py-2"
+                  >
+                    <div>
+                      <span
+                        className={`font-semibold ${
+                          log.eventType.includes('FAIL') || log.eventType.includes('LOCK')
+                            ? 'text-red-600'
+                            : 'text-[#0052FF]'
+                        }`}
+                      >
+                        {log.eventType}
+                      </span>
+                      <div className="text-[11px] text-[#52627A]">
+                        {log.actor} · {log.ipAddress}
+                      </div>
+                    </div>
+                    <span className="shrink-0 text-[10px] text-slate-400">
+                      {new Date(log.createdAt).toLocaleString()}
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
         </div>
       </div>
     </div>

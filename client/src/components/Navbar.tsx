@@ -12,6 +12,7 @@ const NAV_LINKS = [
 export function Navbar({ openJobsCount = 0 }: { openJobsCount?: number }) {
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
@@ -19,7 +20,11 @@ export function Navbar({ openJobsCount = 0 }: { openJobsCount?: number }) {
   }, [location.pathname]);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+      const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+      setScrollProgress(Math.min(1, Math.max(0, window.scrollY / max)));
+    };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
@@ -90,6 +95,14 @@ export function Navbar({ openJobsCount = 0 }: { openJobsCount?: number }) {
             </button>
           </div>
         </div>
+
+        {/* GPU-accelerated sapphire scroll-progress beam */}
+        <div className="h-[2px] w-full overflow-hidden bg-transparent">
+          <div
+            className="h-full w-full origin-left bg-gradient-to-r from-[#0052FF] via-[#0090FF] to-[#00B8F4] transition-transform duration-75"
+            style={{ transform: `scaleX(${scrollProgress})` }}
+          />
+        </div>
       </header>
 
       {/* Clean Light Mobile Drawer */}
@@ -118,9 +131,6 @@ export function Navbar({ openJobsCount = 0 }: { openJobsCount?: number }) {
           >
             Start a project
             <ArrowUpRight className="h-4 w-4" />
-          </Link>
-          <Link to="/admin" className="text-xs font-medium text-slate-500 hover:text-[#0052FF]">
-            Admin Portal
           </Link>
         </div>
       </div>

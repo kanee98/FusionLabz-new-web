@@ -99,6 +99,15 @@ export interface Inquiry {
   createdAt: string;
 }
 
+export interface AuditLog {
+  id: string;
+  eventType: string;
+  actor: string;
+  ipAddress: string;
+  detail: string;
+  createdAt: string;
+}
+
 export interface SmtpSettings {
   host: string;
   port: number;
@@ -118,10 +127,11 @@ export interface SiteSettings {
   whatsapp: string;
   address: string;
   globalReach: string;
-  linkedin: string;
-  github: string;
-  x: string;
-  instagram: string;
+  facebook?: string;
+  instagram?: string;
+  linkedin?: string;
+  github?: string;
+  x?: string;
   stats: StatItem[];
   smtp?: SmtpSettings;
 }
@@ -139,6 +149,7 @@ export interface AdminUser {
 }
 
 export interface DashboardData {
+  storageEngine?: 'mysql' | 'json';
   counts: {
     projects: number;
     publishedProjects: number;

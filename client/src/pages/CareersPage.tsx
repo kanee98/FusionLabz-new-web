@@ -23,7 +23,7 @@ const PRINCIPLES = [
   },
   {
     title: 'Flexible & modern',
-    body: 'Hybrid Colombo workspace or remote flexibility, supported by competitive compensation and performance rewards.',
+    body: 'Hybrid Kandy workspace or remote flexibility, supported by competitive compensation and performance rewards.',
   },
 ];
 

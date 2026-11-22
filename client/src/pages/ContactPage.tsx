@@ -1,22 +1,26 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import { CheckCircle2, Mail, MapPin, Phone } from 'lucide-react';
+import { ArrowUpRight, CheckCircle2, Mail, MapPin, MessageCircle, Phone } from 'lucide-react';
 import type { SiteSettings } from '../types';
 import { publicApi } from '../lib/api';
 
 const SERVICE_OPTIONS = [
   'Custom Software',
-  'Web & SaaS Platform',
-  'Mobile App',
-  'E-Commerce',
-  'Cloud & DevOps',
-  'AI & Data',
-  'Product Redesign',
+  'CCTV Face Tracking',
+  'Gym Workout Scheduler',
+  'Web Platform',
+  'Windows Desktop App',
+  'AI & Automation',
 ];
 
-const BUDGET_OPTIONS = ['< $10K', '$10K – $25K', '$25K – $50K', '$50K+', 'Retainer'];
+const BUDGET_OPTIONS = ['< $5K', '$5K – $15K', '$15K – $35K', '$35K+', 'Flexible / Discuss'];
 
 const TIMELINE_OPTIONS = ['< 1 Month', '1 – 3 Months', '3 – 6 Months', 'Flexible'];
+
+function formatWhatsAppUrl(raw?: string): string {
+  const digits = String(raw || '').replace(/[^\d]/g, '');
+  return digits.length >= 7 ? `https://wa.me/${digits}` : '';
+}
 
 export function ContactPage({ settings }: { settings: SiteSettings | null }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -25,8 +29,8 @@ export function ContactPage({ settings }: { settings: SiteSettings | null }) {
   const [email, setEmail] = useState('');
   const [company, setCompany] = useState('');
   const [phone, setPhone] = useState('');
-  const [services, setServices] = useState<string[]>(['Web & SaaS Platform']);
-  const [budget, setBudget] = useState('$10K – $25K');
+  const [services, setServices] = useState<string[]>(['Web Platform']);
+  const [budget, setBudget] = useState('Flexible / Discuss');
   const [timeline, setTimeline] = useState('1 – 3 Months');
   const [message, setMessage] = useState('');
   const [honeypot, setHoneypot] = useState('');
@@ -81,6 +85,13 @@ export function ContactPage({ settings }: { settings: SiteSettings | null }) {
     }
   };
 
+  const contactEmail = settings?.email || 'connect@fusionlabz.lk';
+  const address = settings?.address || 'Kandy, Sri Lanka';
+  const facebookUrl =
+    settings?.facebook || 'https://www.facebook.com/profile.php?id=61589241403873';
+  const instagramUrl = settings?.instagram || 'https://www.instagram.com/fusionlabz.lk/';
+  const whatsappUrl = formatWhatsAppUrl(settings?.whatsapp || settings?.phone);
+
   return (
     <div ref={containerRef} className="relative z-10 min-h-screen pt-36 pb-24">
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
@@ -95,38 +106,71 @@ export function ContactPage({ settings }: { settings: SiteSettings | null }) {
               </span>
             </h1>
             <p className="mt-5 text-base leading-relaxed text-[#475569]">
-              Share a short overview of what you’re building. Our engineering directors reply within
-              one business day with clear next steps.
+              Share a short overview of your project, or request a demo of our CCTV Face Tracking
+              or Gym Workout Scheduler Windows applications. We reply within one business day.
             </p>
 
             <div className="mt-10 space-y-5 rounded-2xl border border-[#DCE8FA] bg-white/90 p-7 text-sm shadow-sm backdrop-blur-md">
               <a
-                href={`mailto:${settings?.email || 'hello@fusionlabz.lk'}`}
+                href={`mailto:${contactEmail}`}
                 className="flex items-center gap-3.5 font-medium text-[#09152B] transition-colors hover:text-[#0052FF]"
               >
                 <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#EFF6FF] text-[#0052FF]">
                   <Mail className="h-4 w-4" />
                 </span>
-                <span>{settings?.email || 'hello@fusionlabz.lk'}</span>
+                <span>{contactEmail}</span>
               </a>
 
-              <a
-                href={`tel:${(settings?.phone || '+94774508890').replace(/\s+/g, '')}`}
-                className="flex items-center gap-3.5 font-medium text-[#09152B] transition-colors hover:text-[#0052FF]"
-              >
-                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#EFF6FF] text-[#0052FF]">
-                  <Phone className="h-4 w-4" />
-                </span>
-                <span>{settings?.phone || '+94 77 450 8890'}</span>
-              </a>
+              {settings?.phone && (
+                <a
+                  href={`tel:${settings.phone.replace(/\s+/g, '')}`}
+                  className="flex items-center gap-3.5 font-medium text-[#09152B] transition-colors hover:text-[#0052FF]"
+                >
+                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#EFF6FF] text-[#0052FF]">
+                    <Phone className="h-4 w-4" />
+                  </span>
+                  <span>{settings.phone}</span>
+                </a>
+              )}
 
-              <div className="flex items-start gap-3.5 text-[#52627A]">
+              <div className="flex items-center gap-3.5 text-[#52627A]">
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#EFF6FF] text-[#0052FF]">
                   <MapPin className="h-4 w-4" />
                 </span>
-                <span className="pt-1 leading-relaxed">
-                  {settings?.address || 'Level 08, Orion City IT Park, Colombo 09, Sri Lanka'}
-                </span>
+                <span className="font-medium text-[#09152B]">{address}</span>
+              </div>
+
+              <div className="border-t border-slate-100 pt-5">
+                <div className="mb-3 text-xs font-semibold text-[#52627A]">Connect with us</div>
+                <div className="flex flex-wrap gap-2">
+                  <a
+                    href={facebookUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-[#DCE8FA] bg-[#F8FBFF] px-3.5 py-1.5 text-xs font-medium text-[#09152B] transition-colors hover:border-[#0052FF] hover:text-[#0052FF]"
+                  >
+                    Facebook <ArrowUpRight className="h-3.5 w-3.5" />
+                  </a>
+                  <a
+                    href={instagramUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-[#DCE8FA] bg-[#F8FBFF] px-3.5 py-1.5 text-xs font-medium text-[#09152B] transition-colors hover:border-[#0052FF] hover:text-[#0052FF]"
+                  >
+                    Instagram <ArrowUpRight className="h-3.5 w-3.5" />
+                  </a>
+                  {whatsappUrl && (
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-[#EFF6FF] px-3.5 py-1.5 text-xs font-semibold text-[#0052FF] transition-colors hover:bg-[#0052FF] hover:text-white"
+                    >
+                      <MessageCircle className="h-3.5 w-3.5" />
+                      WhatsApp
+                    </a>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -206,26 +250,26 @@ export function ContactPage({ settings }: { settings: SiteSettings | null }) {
                         required
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
-                        placeholder="Jane Doe"
+                        placeholder="Your full name"
                         className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B] placeholder-slate-400"
                       />
                     </div>
                     <div>
                       <label className="mb-1.5 block text-xs font-medium text-[#334155]">
-                        Work email *
+                        Email address *
                       </label>
                       <input
                         type="email"
                         required
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="jane@company.com"
+                        placeholder="you@company.com"
                         className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B] placeholder-slate-400"
                       />
                     </div>
                     <div>
                       <label className="mb-1.5 block text-xs font-medium text-[#334155]">
-                        Company
+                        Company / Organization
                       </label>
                       <input
                         type="text"
@@ -237,7 +281,7 @@ export function ContactPage({ settings }: { settings: SiteSettings | null }) {
                     </div>
                     <div>
                       <label className="mb-1.5 block text-xs font-medium text-[#334155]">
-                        Phone
+                        Phone / WhatsApp
                       </label>
                       <input
                         type="tel"
@@ -293,7 +337,7 @@ export function ContactPage({ settings }: { settings: SiteSettings | null }) {
                       rows={5}
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
-                      placeholder="Tell us about your goals, timeline, and any technical context..."
+                      placeholder="Tell us about your goals, timeline, or which product you'd like to discuss..."
                       className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B] placeholder-slate-400"
                     />
                   </div>

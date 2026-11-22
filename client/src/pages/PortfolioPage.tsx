@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ArrowUpRight, Search } from 'lucide-react';
 import type { Client, Project } from '../types';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface PortfolioPageProps {
   projects: Project[];
@@ -35,15 +38,31 @@ export function PortfolioPage({ projects, clients, onSelectProject }: PortfolioP
   }, [projects, selectedType, selectedCategory, query]);
 
   useEffect(() => {
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const ctx = gsap.context(() => {
       gsap.fromTo(
         '.work-fade',
-        { y: 20, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.7, stagger: 0.06, ease: 'power3.out' }
+        { y: 26, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.75, stagger: 0.08, ease: 'power3.out' }
       );
+      if (prefersReduced) return;
+      gsap.utils.toArray<HTMLElement>('.work-card-reveal').forEach((card) => {
+        gsap.fromTo(
+          card,
+          { y: 36, opacity: 0, scale: 0.985 },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 0.8,
+            ease: 'power3.out',
+            scrollTrigger: { trigger: card, start: 'top 86%', once: true },
+          }
+        );
+      });
     }, containerRef);
     return () => ctx.revert();
-  }, []);
+  }, [filtered.length]);
 
   return (
     <div ref={containerRef} className="relative z-10 min-h-screen pt-36 pb-24">
@@ -130,7 +149,7 @@ export function PortfolioPage({ projects, clients, onSelectProject }: PortfolioP
               <article
                 key={project.id}
                 onClick={() => onSelectProject(project)}
-                className="work-fade group cursor-pointer overflow-hidden rounded-2xl border border-[#DCE8FA] bg-white shadow-[0_14px_40px_-22px_rgba(9,21,43,0.16)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0052FF]/35 hover:shadow-[0_24px_55px_-22px_rgba(0,82,255,0.22)]"
+                className="work-card-reveal group cursor-pointer overflow-hidden rounded-2xl border border-[#DCE8FA] bg-white shadow-[0_14px_40px_-22px_rgba(9,21,43,0.16)] transition-all duration-300 hover:-translate-y-1 hover:border-[#0052FF]/35 hover:shadow-[0_24px_55px_-22px_rgba(0,82,255,0.22)]"
               >
                 <div className="aspect-[16/10] overflow-hidden bg-[#071633]">
                   {project.coverImage && (

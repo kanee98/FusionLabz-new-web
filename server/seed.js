@@ -1,0 +1,378 @@
+const config = require('./config');
+const { hashPassword } = require('./auth');
+
+function createSeedData() {
+  const now = new Date().toISOString();
+  return {
+    meta: {
+      version: 2,
+      createdAt: now,
+      updatedAt: now,
+    },
+    admin: {
+      email: config.INITIAL_ADMIN_EMAIL,
+      name: 'FusionLabz Admin',
+      passwordHash: hashPassword(config.INITIAL_ADMIN_PASSWORD),
+      updatedAt: now,
+    },
+    settings: {
+      companyName: 'FusionLabz',
+      tagline: 'Software engineering, AI vision systems, and bespoke web platforms built in Kandy, Sri Lanka.',
+      email: 'connect@fusionlabz.lk',
+      careersEmail: 'connect@fusionlabz.lk',
+      phone: '',
+      whatsapp: '',
+      address: 'Kandy, Sri Lanka',
+      globalReach: 'Kandy, Sri Lanka · Serving Clients Worldwide',
+      facebook: 'https://www.facebook.com/profile.php?id=61589241403873',
+      instagram: 'https://www.instagram.com/fusionlabz.lk/',
+      linkedin: '',
+      github: '',
+      x: '',
+      stats: [
+        { label: 'Flagship products', value: '2', suffix: '' },
+        { label: 'Custom architecture', value: '100', suffix: '%' },
+        { label: 'Target availability', value: '99.9', suffix: '%' },
+        { label: 'Direct response SLA', value: '24', suffix: 'h' },
+      ],
+      smtp: {
+        host: config.SMTP.host,
+        port: config.SMTP.port,
+        secure: config.SMTP.secure,
+        user: config.SMTP.user,
+        pass: config.SMTP.pass,
+        from: config.SMTP.from,
+        notifyEmail: config.SMTP.notifyEmail,
+      },
+    },
+    projects: [
+      {
+        id: 'prj_cctv_face_tracking',
+        slug: 'cctv-face-tracking-system',
+        title: 'CCTV Face Tracking & Access Control',
+        type: 'Flagship Product',
+        category: 'AI & Computer Vision',
+        clientName: 'FusionLabz Proprietary Product',
+        year: '2026',
+        summary:
+          'Windows desktop AI surveillance and gym access control system connecting directly to multi-camera IP CCTV feeds to identify members in real time and automatically separate Paid vs. Unpaid/Expired entries.',
+        challenge:
+          'Fitness centers and commercial facilities suffered significant revenue leakage from unpaid or expired memberships slipping past busy front desks, while passive CCTV footage offered no real-time verification.',
+        solution:
+          'Engineered a persistent facial recognition Windows desktop application backed by SQL Server Express (`\\SQLEXPRESS`) that monitors live stacked IP camera streams, tracks faces continuously, logs detections to a searchable database, and instantly splits recognized individuals into Paid Members and Unpaid / Expired alert panels.',
+        impact:
+          'Stops unauthorized and expired-membership entry in real time without turnstiles or RFID cards—giving reception teams instant visual clarity across 2-camera live CCTV feeds and complete detection history logs.',
+        techStack: ['Windows Desktop', 'Python / OpenCV', 'Deep Face Recognition', 'RTSP IP CCTV', 'SQL Server Express', 'Real-Time Alerts'],
+        metrics: [
+          { label: 'Live Monitoring', value: 'Multi-Cam' },
+          { label: 'Database Engine', value: 'SQL Express' },
+          { label: 'Member Verification', value: 'Paid / Unpaid' },
+        ],
+        coverImage: '/uploads/projects/cctv-face-tracking.jpg',
+        liveUrl: '',
+        featured: true,
+        published: true,
+        order: 1,
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        id: 'prj_gym_schedules',
+        slug: 'gym-workout-scheduler',
+        title: 'Gym Workout Scheduler',
+        type: 'Flagship Product',
+        category: 'Windows Desktop Software',
+        clientName: 'FusionLabz Proprietary Product',
+        year: '2026',
+        summary:
+          'Dedicated Windows desktop application built for gyms and personal trainers to create, customize, manage, and print structured member workout schedules, exercise splits, sets, reps, and progression plans.',
+        challenge:
+          'Gym instructors spent hours rewriting repetitive paper workout cards and spreadsheets for every member, leading to inconsistent routines, lost workout history, and slow member onboarding.',
+        solution:
+          'Designed a fast, offline-ready Windows desktop workout scheduling application featuring reusable muscle-group split templates, structured exercise libraries with sets/reps/rest intervals, per-member schedule history, and clean one-click printable workout sheets.',
+        impact:
+          'Cuts workout plan creation time from 20 minutes to under 2 minutes per member while standardizing coaching quality and maintaining complete digital member training archives.',
+        techStack: ['Windows Desktop', 'C# / .NET', 'SQL Server', 'Schedule Templates', 'PDF / Print Export'],
+        metrics: [
+          { label: 'Platform', value: 'Windows App' },
+          { label: 'Plan Creation', value: '< 2 min' },
+          { label: 'Output', value: 'Print & PDF' },
+        ],
+        coverImage: '/uploads/projects/gym-schedules.jpg',
+        liveUrl: '',
+        featured: true,
+        published: true,
+        order: 2,
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        id: 'prj_bizwise',
+        slug: 'bizwise-lk',
+        title: 'BizWise — AI & Analytics Platform',
+        type: 'Portfolio Project',
+        category: 'AI & Data',
+        clientName: 'BizWise',
+        year: '2025',
+        summary:
+          'Corporate digital platform for BizWise, a Sri Lankan artificial intelligence and business intelligence consultancy delivering Power BI architecture, predictive sales forecasting, and compliant AI automation for SMEs.',
+        challenge:
+          'BizWise needed an authoritative, clean digital presence capable of communicating technical AI consulting, Power BI modeling, and Sri Lankan Data Protection compliance to business decision-makers.',
+        solution:
+          'Designed and developed a crisp, fast-loading web platform structured around clear service pillars, executive consultation funnels, and mobile-first readability.',
+        impact:
+          'Elevated BizWise’s market positioning with startups and enterprise leadership while streamlining qualified inbound advisory inquiries.',
+        techStack: ['React', 'TypeScript', 'Tailwind CSS', 'SEO Architecture', 'Responsive UI'],
+        metrics: [
+          { label: 'Domain', value: 'bizwise.lk' },
+          { label: 'Sector', value: 'AI & BI' },
+          { label: 'Performance', value: 'Sub-Second' },
+        ],
+        coverImage: '/uploads/projects/bizwise-web.jpg',
+        liveUrl: 'https://bizwise.lk',
+        featured: true,
+        published: true,
+        order: 3,
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        id: 'prj_mavix',
+        slug: 'mavix-lk',
+        title: 'Mavix — Digital Growth Agency',
+        type: 'Portfolio Project',
+        category: 'Web & SaaS',
+        clientName: 'Mavix',
+        year: '2025',
+        summary:
+          'Conversion-engineered web platform for Mavix, a performance marketing, SEO, and AI-driven digital growth agency helping startups and brands scale across Sri Lanka.',
+        challenge:
+          'Mavix required a sharp, high-speed agency storefront that stood apart from generic marketing websites and converted paid and organic traffic effortlessly on mobile.',
+        solution:
+          'Crafted a bold, mobile-first digital experience featuring crisp typography, frictionless inquiry capture, and clean technical SEO architecture.',
+        impact:
+          'Delivered an elevated brand identity paired with faster page loads and stronger lead-capture conversion across mobile and desktop.',
+        techStack: ['React', 'Modern CSS', 'Performance SEO', 'Lead Funnels', 'Responsive Design'],
+        metrics: [
+          { label: 'Domain', value: 'mavix.lk' },
+          { label: 'Sector', value: 'Digital Growth' },
+          { label: 'UX Focus', value: 'Mobile-First' },
+        ],
+        coverImage: '/uploads/projects/mavix-web.jpg',
+        liveUrl: 'https://mavix.lk',
+        featured: true,
+        published: true,
+        order: 4,
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        id: 'prj_propwise',
+        slug: 'propwise-lk',
+        title: 'PropWise — Real Estate Discovery',
+        type: 'Portfolio Project',
+        category: 'Web & SaaS',
+        clientName: 'PropWise',
+        year: '2025',
+        summary:
+          'Verified Sri Lankan real estate platform connecting homebuyers and commercial investors with residential properties, office spaces, retail units, and investment land with direct manager access.',
+        challenge:
+          'Property seekers often face cluttered classifieds filled with outdated listings and broker friction when evaluating residential and commercial real estate.',
+        solution:
+          'Built a structured, intuitive property showcase focused on verified listing clarity, clean district browsing, and direct connection with property managers.',
+        impact:
+          'Simplified property discovery for local and overseas Sri Lankan investors with clean listing presentation and direct inquiry workflows.',
+        techStack: ['Web Architecture', 'Responsive UI', 'Search & Filtering', 'SEO Optimization'],
+        metrics: [
+          { label: 'Domain', value: 'propwise.lk' },
+          { label: 'Sector', value: 'PropTech' },
+          { label: 'Listings', value: 'Verified' },
+        ],
+        coverImage: '/uploads/projects/propwise-web.jpg',
+        liveUrl: 'https://propwise.lk',
+        featured: true,
+        published: true,
+        order: 5,
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        id: 'prj_pearlvoyagers',
+        slug: 'pearlvoyagers-com',
+        title: 'Pearl Voyagers — Bespoke Sri Lanka Travel',
+        type: 'Portfolio Project',
+        category: 'Web & SaaS',
+        clientName: 'Pearl Voyagers',
+        year: '2025',
+        summary:
+          'Editorial luxury travel website for Pearl Voyagers, showcasing private customized itineraries across Sri Lanka’s cultural triangle, hill-country tea estates, wildlife safaris, and southern beaches.',
+        challenge:
+          'International travelers seeking boutique, private Sri Lankan journeys expect visual warmth, refined editorial storytelling, and effortless custom itinerary inquiries.',
+        solution:
+          'Designed an immersive quiet-luxury travel platform balancing rich destination storytelling, curated tour architecture, and streamlined international booking inquiries.',
+        impact:
+          'Positioned Pearl Voyagers with international-grade visual polish tailored to high-value private tour travelers worldwide.',
+        techStack: ['Editorial UI/UX', 'Responsive Web', 'Itinerary Architecture', 'Global SEO'],
+        metrics: [
+          { label: 'Domain', value: 'pearlvoyagers.com' },
+          { label: 'Sector', value: 'Luxury Travel' },
+          { label: 'Audience', value: 'International' },
+        ],
+        coverImage: '/uploads/projects/pearlvoyagers-web.jpg',
+        liveUrl: 'https://pearlvoyagers.com',
+        featured: true,
+        published: true,
+        order: 6,
+        createdAt: now,
+        updatedAt: now,
+      },
+    ],
+    clients: [
+      {
+        id: 'cli_bizwise',
+        name: 'BizWise',
+        industry: 'AI & Data Analytics',
+        website: 'https://bizwise.lk',
+        logoUrl: '',
+        featured: true,
+        quote:
+          'FusionLabz translated our AI and business intelligence practice into a crisp, authoritative platform that resonates immediately with executive clients.',
+        authorName: 'BizWise Leadership',
+        authorRole: 'bizwise.lk',
+        impactMetric: 'AI & BI Digital Platform',
+        order: 1,
+        createdAt: now,
+      },
+      {
+        id: 'cli_mavix',
+        name: 'Mavix',
+        industry: 'Digital Marketing & Growth',
+        website: 'https://mavix.lk',
+        logoUrl: '',
+        featured: true,
+        quote:
+          'Clean engineering, fast execution, and sharp visual taste. Our web presence now matches the high-growth digital campaigns we deliver for our clients.',
+        authorName: 'Mavix Team',
+        authorRole: 'mavix.lk',
+        impactMetric: 'Mobile-First Growth Storefront',
+        order: 2,
+        createdAt: now,
+      },
+      {
+        id: 'cli_propwise',
+        name: 'PropWise',
+        industry: 'Real Estate & PropTech',
+        website: 'https://propwise.lk',
+        logoUrl: '',
+        featured: true,
+        quote:
+          'They gave our real estate platform the clarity and structure buyers expect—making verified residential and commercial listings effortless to browse.',
+        authorName: 'PropWise Team',
+        authorRole: 'propwise.lk',
+        impactMetric: 'Verified Property Discovery',
+        order: 3,
+        createdAt: now,
+      },
+      {
+        id: 'cli_pearlvoyagers',
+        name: 'Pearl Voyagers',
+        industry: 'Bespoke Travel & Hospitality',
+        website: 'https://pearlvoyagers.com',
+        logoUrl: '',
+        featured: true,
+        quote:
+          'FusionLabz captured the quiet-luxury spirit of our private Sri Lankan journeys with an elegant, welcoming online experience for global guests.',
+        authorName: 'Pearl Voyagers Team',
+        authorRole: 'pearlvoyagers.com',
+        impactMetric: 'Global Boutique Travel Brand',
+        order: 4,
+        createdAt: now,
+      },
+    ],
+    jobs: [
+      {
+        id: 'job_fullstack_kandy',
+        title: 'Full-Stack Software Engineer (TypeScript / Node.js)',
+        department: 'Engineering',
+        location: 'Kandy, Sri Lanka',
+        workMode: 'Hybrid',
+        employmentType: 'Full-time',
+        experience: '2+ Years',
+        salaryRange: 'Competitive + Performance Bonus',
+        summary:
+          'Build and scale custom web platforms, SaaS systems, and flagship FusionLabz products using TypeScript, React, Node.js, and MySQL.',
+        responsibilities: [
+          'Develop end-to-end features across React frontends and Node.js / MySQL backends.',
+          'Contribute directly to flagship FusionLabz products including the Gym Workout Scheduler desktop app and client web platforms.',
+          'Write clean, maintainable, security-conscious code and participate in architecture reviews.',
+        ],
+        requirements: [
+          '2+ years of practical experience with JavaScript/TypeScript, React, and Node.js.',
+          'Solid experience with relational databases (MySQL / PostgreSQL) and REST API design.',
+          'Strong attention to UI craft, responsiveness, and application security.',
+        ],
+        techStack: ['TypeScript', 'React', 'Node.js', 'MySQL', 'Tailwind CSS'],
+        status: 'open',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        id: 'job_ai_vision',
+        title: 'AI & Computer Vision Engineer',
+        department: 'AI & Vision',
+        location: 'Kandy, Sri Lanka',
+        workMode: 'Hybrid',
+        employmentType: 'Full-time',
+        experience: '2+ Years',
+        salaryRange: 'Competitive + Research & Hardware Support',
+        summary:
+          'Advance our flagship CCTV Face Tracking System and computer vision pipelines for real-time accuracy, edge deployment, and multi-camera scalability.',
+        responsibilities: [
+          'Optimize real-time facial recognition, detection, and tracking models across live RTSP/IP camera streams.',
+          'Build reliable inference services and integrate telemetry cleanly with Node.js web dashboards.',
+          'Benchmark accuracy, latency, and GPU/edge efficiency across diverse lighting and camera environments.',
+        ],
+        requirements: [
+          'Strong Python proficiency with OpenCV, PyTorch/ONNX, and computer vision pipelines.',
+          'Experience working with real-time video streams (RTSP, FFmpeg, GStreamer) and REST/WebSocket integration.',
+          'Passion for shipping practical AI products that solve real-world problems.',
+        ],
+        techStack: ['Python', 'OpenCV', 'PyTorch', 'ONNX', 'RTSP', 'Docker'],
+        status: 'open',
+        createdAt: now,
+        updatedAt: now,
+      },
+      {
+        id: 'job_ui_frontend',
+        title: 'UI/UX & Frontend Developer',
+        department: 'Design & Frontend',
+        location: 'Kandy, Sri Lanka',
+        workMode: 'Remote',
+        employmentType: 'Full-time',
+        experience: '1–3 Years',
+        salaryRange: 'Competitive',
+        summary:
+          'Design and build high-craft, responsive websites and product interfaces for FusionLabz clients and internal software products.',
+        responsibilities: [
+          'Craft clean, modern interfaces in Figma and implement them accurately in React and Tailwind CSS.',
+          'Optimize layout typography, smooth micro-interactions, accessibility, and mobile performance.',
+          'Collaborate closely with backend engineers to deliver launch-ready client websites.',
+        ],
+        requirements: [
+          'Strong portfolio showcasing clean, modern web design and responsive React development.',
+          'Fluency with Figma, Tailwind CSS, React, and modern animation tools (GSAP / Framer).',
+          'High standards for visual polish, typography, and detail.',
+        ],
+        techStack: ['Figma', 'React', 'TypeScript', 'Tailwind CSS', 'GSAP'],
+        status: 'open',
+        createdAt: now,
+        updatedAt: now,
+      },
+    ],
+    applications: [],
+    inquiries: [],
+    auditLogs: [],
+  };
+}
+
+module.exports = { createSeedData };

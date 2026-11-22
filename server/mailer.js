@@ -1,9 +1,9 @@
 const nodemailer = require('nodemailer');
-const { getDb } = require('./db');
+const db = require('./db');
 
 async function sendNotification({ subject, html, replyTo }) {
-  const db = getDb();
-  const smtp = db.settings?.smtp;
+  const settings = await db.getSettings();
+  const smtp = settings?.smtp;
   if (!smtp || !smtp.host || !smtp.user || !smtp.pass) {
     return { sent: false, reason: 'SMTP not configured' };
   }
@@ -19,9 +19,9 @@ async function sendNotification({ subject, html, replyTo }) {
       },
     });
 
-    const to = smtp.notifyEmail || db.settings.email || smtp.user;
+    const to = smtp.notifyEmail || settings.email || smtp.user;
     await transporter.sendMail({
-      from: smtp.from || `FusionLabz Portal <${smtp.user}>`,
+      from: smtp.from || `FusionLabz <${smtp.user}>`,
       to,
       replyTo,
       subject,

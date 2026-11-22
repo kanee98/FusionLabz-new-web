@@ -1,18 +1,19 @@
 const crypto = require('crypto');
 const config = require('./config');
 
-const COOKIE_NAME = 'flz_admin_session';
+const COOKIE_NAME = 'flz_sec_sess';
+const SCRYPT_OPTS = { N: 16384, r: 8, p: 1 };
 
 function hashPassword(password) {
   const salt = crypto.randomBytes(16).toString('hex');
-  const derived = crypto.scryptSync(String(password), salt, 64).toString('hex');
+  const derived = crypto.scryptSync(String(password), salt, 64, SCRYPT_OPTS).toString('hex');
   return `${salt}:${derived}`;
 }
 
 function verifyPassword(password, storedHash) {
   if (!storedHash || !storedHash.includes(':')) return false;
   const [salt, keyHex] = storedHash.split(':');
-  const derived = crypto.scryptSync(String(password), salt, 64);
+  const derived = crypto.scryptSync(String(password), salt, 64, SCRYPT_OPTS);
   const storedBuf = Buffer.from(keyHex, 'hex');
   if (derived.length !== storedBuf.length) return false;
   return crypto.timingSafeEqual(derived, storedBuf);
@@ -38,6 +39,7 @@ function signToken(payload) {
   const body = base64UrlEncode(
     JSON.stringify({
       ...payload,
+      jti: crypto.randomBytes(8).toString('hex'),
       iat: now,
       exp: now + config.JWT_EXPIRES_SECONDS,
     })
@@ -97,7 +99,7 @@ function requireAdmin(req, res, next) {
   const token = extractToken(req);
   const payload = verifyToken(token);
   if (!payload || payload.role !== 'admin') {
-    return res.status(401).json({ error: 'Authentication required' });
+    return res.status(401).json({ error: 'Authentication required.' });
   }
   req.admin = payload;
   return next();
@@ -106,7 +108,7 @@ function requireAdmin(req, res, next) {
 function setAuthCookie(res, token) {
   res.cookie(COOKIE_NAME, token, {
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: 'strict',
     secure: config.NODE_ENV === 'production',
     maxAge: config.JWT_EXPIRES_SECONDS * 1000,
     path: '/',

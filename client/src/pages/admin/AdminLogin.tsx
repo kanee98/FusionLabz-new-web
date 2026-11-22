@@ -6,7 +6,7 @@ import { adminApi } from '../../lib/api';
 import type { AdminUser } from '../../types';
 
 export function AdminLogin({ onSuccess }: { onSuccess: (admin: AdminUser) => void }) {
-  const [email, setEmail] = useState('admin@fusionlabz.lk');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPw, setShowPw] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -51,9 +51,11 @@ export function AdminLogin({ onSuccess }: { onSuccess: (admin: AdminUser) => voi
             <input
               type="email"
               required
+              autoComplete="username"
+              placeholder="Enter admin email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
+              className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B] placeholder-slate-400"
             />
           </div>
 
