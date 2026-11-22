@@ -44,7 +44,7 @@ function AppShell() {
   }
 
   return (
-    <div className="relative min-h-screen bg-[#060709] text-[#F5F7FA]">
+    <div className="relative min-h-screen bg-[#F8FBFF] text-[#09152B]">
       <CosmicCanvas intensity={isHome ? 'hero' : 'ambient'} />
       <Navbar openJobsCount={data?.jobs?.length || 0} />
 

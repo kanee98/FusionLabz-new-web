@@ -50,7 +50,6 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [toast, setToast] = useState<{ type: 'ok' | 'err'; msg: string } | null>(null);
 
-  // Admin datasets
   const [dashboard, setDashboard] = useState<DashboardData | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
   const [clients, setClients] = useState<Client[]>([]);
@@ -59,7 +58,6 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
   const [inquiries, setInquiries] = useState<Inquiry[]>([]);
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null);
 
-  // Modals
   const [editingProject, setEditingProject] = useState<Partial<Project> | null>(null);
   const [editingClient, setEditingClient] = useState<Partial<Client> | null>(null);
   const [editingJob, setEditingJob] = useState<Partial<Job> | null>(null);
@@ -107,8 +105,8 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
 
   if (checkingAuth) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#060709] text-xs tracking-[0.2em] text-slate-400 uppercase">
-        Verifying Session...
+      <div className="flex min-h-screen items-center justify-center bg-[#F5F8FD] text-xs font-medium text-[#52627A]">
+        Verifying session...
       </div>
     );
   }
@@ -150,41 +148,41 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
   };
 
   return (
-    <div className="flex min-h-screen bg-[#060709] text-slate-100">
+    <div className="flex min-h-screen bg-[#F5F8FD] text-[#09152B]">
       {/* Toast Notification */}
       {toast && (
         <div
-          className={`fixed right-5 bottom-5 z-[110] flex items-center gap-2 rounded-xl border px-4 py-3 text-xs font-medium shadow-2xl backdrop-blur-xl ${
+          className={`fixed right-5 bottom-5 z-[110] flex items-center gap-2 rounded-xl border px-4 py-3 text-xs font-medium shadow-xl ${
             toast.type === 'ok'
-              ? 'border-[#00B8F4]/40 bg-[#08131E] text-white'
-              : 'border-red-500/40 bg-red-950/90 text-red-200'
+              ? 'border-[#BFDBFE] bg-[#07183B] text-white'
+              : 'border-red-300 bg-red-600 text-white'
           }`}
         >
-          <Check className="h-4 w-4 text-[#00B8F4]" />
+          <Check className="h-4 w-4 text-[#38BDF8]" />
           <span>{toast.msg}</span>
         </div>
       )}
 
-      {/* Sidebar */}
+      {/* Deep Royal Sapphire Sidebar */}
       <aside
-        className={`fixed inset-y-0 left-0 z-50 flex w-68 flex-col justify-between border-r border-white/[0.08] bg-[#090B0F] p-5 transition-transform duration-300 lg:static lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-50 flex w-68 flex-col justify-between bg-gradient-to-b from-[#07183B] to-[#051029] p-5 text-white transition-transform duration-300 lg:static lg:translate-x-0 ${
           sidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div>
           <div className="flex items-center justify-between pb-6">
-            <BrandLogo variant="dark-bg" className="h-8" />
+            <BrandLogo variant="dark-bg" className="h-12" />
             <button
               type="button"
               onClick={() => setSidebarOpen(false)}
-              className="text-slate-400 lg:hidden"
+              className="text-slate-300 lg:hidden"
             >
               <X className="h-5 w-5" />
             </button>
           </div>
 
-          <div className="mb-3 text-[10px] tracking-[0.2em] text-slate-500 uppercase">
-            Management Console
+          <div className="mb-3 px-2 text-[11px] font-medium tracking-wide text-[#7D99C7]">
+            Workspace
           </div>
 
           <nav className="space-y-1">
@@ -200,16 +198,20 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
                   }}
                   className={`flex w-full items-center justify-between rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all ${
                     active
-                      ? 'bg-[#00B8F4]/15 text-white ring-1 ring-[#00B8F4]/40'
-                      : 'text-slate-400 hover:bg-white/[0.04] hover:text-white'
+                      ? 'bg-[#0052FF] text-white shadow-[0_8px_20px_-6px_rgba(0,82,255,0.65)]'
+                      : 'text-[#A6BFE6] hover:bg-white/[0.07] hover:text-white'
                   }`}
                 >
                   <span className="flex items-center gap-3">
-                    <item.icon className={`h-4 w-4 ${active ? 'text-[#00B8F4]' : ''}`} />
+                    <item.icon className={`h-4 w-4 ${active ? 'text-white' : 'text-[#60A5FA]'}`} />
                     {item.label}
                   </span>
                   {item.badge ? (
-                    <span className="rounded-full bg-[#00B8F4] px-2 py-0.5 text-[10px] font-bold text-[#05070A]">
+                    <span
+                      className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                        active ? 'bg-white text-[#0052FF]' : 'bg-[#00B8F4] text-[#041129]'
+                      }`}
+                    >
                       {item.badge}
                     </span>
                   ) : null}
@@ -219,17 +221,17 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
           </nav>
         </div>
 
-        <div className="space-y-3 border-t border-white/[0.08] pt-5">
-          <div className="rounded-xl border border-white/[0.07] bg-white/[0.02] p-3">
+        <div className="space-y-3 border-t border-white/10 pt-5">
+          <div className="rounded-xl bg-white/[0.06] p-3">
             <div className="truncate text-xs font-semibold text-white">{admin.name}</div>
-            <div className="truncate text-[10px] text-slate-500">{admin.email}</div>
+            <div className="truncate text-[11px] text-[#8EA7CF]">{admin.email}</div>
           </div>
 
           <div className="flex items-center gap-2">
             <Link
               to="/"
               target="_blank"
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-white/10 py-2 text-xs text-slate-300 hover:border-[#00B8F4] hover:text-white"
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-white/15 py-2 text-xs font-medium text-[#C5D8F5] hover:border-white/35 hover:text-white"
             >
               <ExternalLink className="h-3.5 w-3.5" />
               Live Site
@@ -237,7 +239,7 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
             <button
               type="button"
               onClick={handleLogout}
-              className="flex items-center justify-center gap-1.5 rounded-lg border border-white/10 px-3 py-2 text-xs text-slate-400 hover:border-red-500/40 hover:text-red-300"
+              className="flex items-center justify-center gap-1.5 rounded-lg border border-white/15 px-3 py-2 text-xs font-medium text-[#A6BFE6] hover:border-red-400/50 hover:text-red-300"
             >
               <LogOut className="h-3.5 w-3.5" />
               Exit
@@ -246,18 +248,18 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
         </div>
       </aside>
 
-      {/* Main Content */}
+      {/* Crisp Light Executive Workspace */}
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-white/[0.08] bg-[#060709]/90 px-5 backdrop-blur-xl sm:px-8">
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-[#DCE8FA] bg-white/90 px-5 backdrop-blur-xl sm:px-8">
           <div className="flex items-center gap-3">
             <button
               type="button"
               onClick={() => setSidebarOpen(true)}
-              className="rounded-lg border border-white/10 p-2 text-slate-300 lg:hidden"
+              className="rounded-lg border border-slate-200 p-2 text-slate-600 lg:hidden"
             >
               <Menu className="h-4 w-4" />
             </button>
-            <h1 className="font-display text-lg font-semibold capitalize text-white">
+            <h1 className="font-display text-lg font-semibold text-[#09152B]">
               {navItems.find((n) => n.key === activeTab)?.label}
             </h1>
           </div>
@@ -277,10 +279,10 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
                   order: projects.length + 1,
                 })
               }
-              className="hidden items-center gap-1.5 rounded-lg border border-white/12 bg-white/[0.04] px-3 py-1.5 text-xs font-medium text-white hover:border-[#00B8F4] sm:inline-flex"
+              className="hidden items-center gap-1.5 rounded-lg border border-[#DCE8FA] bg-[#F8FBFF] px-3 py-1.5 text-xs font-semibold text-[#09152B] hover:border-[#0052FF] hover:text-[#0052FF] sm:inline-flex"
             >
-              <Plus className="h-3.5 w-3.5 text-[#00B8F4]" />
-              Project
+              <Plus className="h-3.5 w-3.5 text-[#0052FF]" />
+              Add Project
             </button>
             <button
               type="button"
@@ -297,7 +299,7 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
                   techStack: [],
                 })
               }
-              className="inline-flex items-center gap-1.5 rounded-lg bg-[#00B8F4] px-3.5 py-1.5 text-xs font-bold text-[#05070A] hover:bg-white"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[#0052FF] px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-[#0040CC]"
             >
               <Plus className="h-3.5 w-3.5" />
               Post Job
@@ -321,14 +323,12 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
                     key={kpi.label}
                     type="button"
                     onClick={() => setActiveTab(kpi.tab)}
-                    className="rounded-2xl border border-white/[0.08] bg-[#0B0D12] p-5 text-left transition-colors hover:border-[#00B8F4]/50"
+                    className="rounded-2xl border border-[#DCE8FA] bg-white p-5 text-left shadow-sm transition-all hover:border-[#0052FF]/45 hover:shadow-md"
                   >
-                    <div className="text-[10px] tracking-[0.15em] text-slate-500 uppercase">
-                      {kpi.label}
-                    </div>
+                    <div className="text-xs font-medium text-[#52627A]">{kpi.label}</div>
                     <div
-                      className={`mt-2 font-display text-4xl font-bold ${
-                        kpi.accent && kpi.val > 0 ? 'text-[#00B8F4]' : 'text-white'
+                      className={`mt-2 font-display text-4xl font-semibold ${
+                        kpi.accent && kpi.val > 0 ? 'text-[#0052FF]' : 'text-[#09152B]'
                       }`}
                     >
                       {kpi.val}
@@ -338,30 +338,30 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
               </div>
 
               <div className="grid gap-6 lg:grid-cols-2">
-                <div className="rounded-2xl border border-white/[0.08] bg-[#0B0D12] p-6">
-                  <div className="flex items-center justify-between border-b border-white/[0.07] pb-4">
-                    <h2 className="font-display text-base font-semibold text-white">
+                <div className="rounded-2xl border border-[#DCE8FA] bg-white p-6 shadow-sm">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <h2 className="font-display text-base font-semibold text-[#09152B]">
                       Recent Candidate Applications
                     </h2>
                     <button
                       type="button"
                       onClick={() => setActiveTab('applications')}
-                      className="text-xs text-[#00B8F4]"
+                      className="text-xs font-semibold text-[#0052FF]"
                     >
-                      View All →
+                      View all →
                     </button>
                   </div>
-                  <div className="mt-4 divide-y divide-white/[0.06]">
+                  <div className="mt-4 divide-y divide-slate-100">
                     {dashboard.recentApplications.length === 0 ? (
-                      <p className="py-6 text-sm text-slate-500">No applications received yet.</p>
+                      <p className="py-6 text-sm text-slate-400">No applications received yet.</p>
                     ) : (
                       dashboard.recentApplications.map((a) => (
                         <div key={a.id} className="flex items-center justify-between py-3.5">
                           <div>
-                            <div className="text-sm font-medium text-white">{a.fullName}</div>
-                            <div className="text-xs text-slate-400">{a.jobTitle}</div>
+                            <div className="text-sm font-semibold text-[#09152B]">{a.fullName}</div>
+                            <div className="text-xs text-[#52627A]">{a.jobTitle}</div>
                           </div>
-                          <span className="rounded-full border border-[#00B8F4]/30 bg-[#00B8F4]/10 px-2.5 py-0.5 text-[10px] text-[#00B8F4] uppercase">
+                          <span className="rounded-full bg-[#EFF6FF] px-2.5 py-0.5 text-[11px] font-semibold text-[#0052FF] capitalize">
                             {a.status}
                           </span>
                         </div>
@@ -370,38 +370,38 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
                   </div>
                 </div>
 
-                <div className="rounded-2xl border border-white/[0.08] bg-[#0B0D12] p-6">
-                  <div className="flex items-center justify-between border-b border-white/[0.07] pb-4">
-                    <h2 className="font-display text-base font-semibold text-white">
+                <div className="rounded-2xl border border-[#DCE8FA] bg-white p-6 shadow-sm">
+                  <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+                    <h2 className="font-display text-base font-semibold text-[#09152B]">
                       Recent Contact Inquiries
                     </h2>
                     <button
                       type="button"
                       onClick={() => setActiveTab('inquiries')}
-                      className="text-xs text-[#00B8F4]"
+                      className="text-xs font-semibold text-[#0052FF]"
                     >
-                      View All →
+                      View all →
                     </button>
                   </div>
-                  <div className="mt-4 divide-y divide-white/[0.06]">
+                  <div className="mt-4 divide-y divide-slate-100">
                     {dashboard.recentInquiries.length === 0 ? (
-                      <p className="py-6 text-sm text-slate-500">No project inquiries yet.</p>
+                      <p className="py-6 text-sm text-slate-400">No project inquiries yet.</p>
                     ) : (
                       dashboard.recentInquiries.map((inq) => (
                         <div key={inq.id} className="flex items-center justify-between py-3.5">
                           <div>
-                            <div className="text-sm font-medium text-white">
+                            <div className="text-sm font-semibold text-[#09152B]">
                               {inq.fullName}{' '}
-                              <span className="text-xs text-slate-500">
+                              <span className="text-xs font-normal text-slate-400">
                                 ({inq.ticketId})
                               </span>
                             </div>
-                            <div className="text-xs text-slate-400">
-                              {inq.company || inq.email} • {inq.budget}
+                            <div className="text-xs text-[#52627A]">
+                              {inq.company || inq.email} · {inq.budget}
                             </div>
                           </div>
-                          <span className="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-0.5 text-[10px] text-slate-300 uppercase">
-                            {inq.status}
+                          <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-medium text-slate-700 capitalize">
+                            {inq.status.replace('_', ' ')}
                           </span>
                         </div>
                       ))
@@ -416,8 +416,8 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
           {activeTab === 'projects' && (
             <div className="space-y-6">
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <p className="text-sm text-slate-400">
-                  Manage portfolio case studies & flagship products displayed on Home and /portfolio.
+                <p className="text-sm text-[#52627A]">
+                  Manage portfolio case studies & flagship products shown on Home and /portfolio.
                 </p>
                 <button
                   type="button"
@@ -433,7 +433,7 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
                       order: projects.length + 1,
                     })
                   }
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#00B8F4] px-4 py-2.5 text-xs font-bold text-[#05070A] uppercase"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#0052FF] px-4 py-2.5 text-xs font-semibold text-white shadow-sm hover:bg-[#0040CC]"
                 >
                   <Plus className="h-4 w-4" /> Add New Project
                 </button>
@@ -443,9 +443,9 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
                 {projects.map((p) => (
                   <div
                     key={p.id}
-                    className="flex flex-col overflow-hidden rounded-2xl border border-white/[0.08] bg-[#0B0D12]"
+                    className="flex flex-col overflow-hidden rounded-2xl border border-[#DCE8FA] bg-white shadow-sm"
                   >
-                    <div className="relative aspect-[16/9] bg-[#0E1522]">
+                    <div className="relative aspect-[16/9] bg-[#071633]">
                       {p.coverImage && (
                         <img
                           src={p.coverImage}
@@ -454,16 +454,16 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
                         />
                       )}
                       <div className="absolute top-3 left-3 flex gap-1.5">
-                        <span className="rounded bg-[#060709]/85 px-2 py-0.5 text-[10px] text-[#00B8F4]">
+                        <span className="rounded-full bg-white/90 px-2.5 py-0.5 text-[10px] font-semibold text-[#0052FF]">
                           {p.type}
                         </span>
                         {p.featured && (
-                          <span className="rounded bg-emerald-500/20 px-2 py-0.5 text-[10px] text-emerald-300">
+                          <span className="rounded-full bg-emerald-500 px-2.5 py-0.5 text-[10px] font-semibold text-white">
                             Featured
                           </span>
                         )}
                         {!p.published && (
-                          <span className="rounded bg-amber-500/20 px-2 py-0.5 text-[10px] text-amber-300">
+                          <span className="rounded-full bg-amber-500 px-2.5 py-0.5 text-[10px] font-semibold text-white">
                             Draft
                           </span>
                         )}
@@ -472,20 +472,20 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
 
                     <div className="flex flex-1 flex-col justify-between p-5">
                       <div>
-                        <div className="text-[11px] text-slate-500">
-                          {p.category} • {p.year}
+                        <div className="text-xs font-medium text-[#52627A]">
+                          {p.category} · {p.year}
                         </div>
-                        <h3 className="mt-1 font-display text-lg font-semibold text-white">
+                        <h3 className="mt-1 font-display text-lg font-semibold text-[#09152B]">
                           {p.title}
                         </h3>
-                        <p className="mt-2 line-clamp-2 text-xs text-slate-400">{p.summary}</p>
+                        <p className="mt-2 line-clamp-2 text-xs text-[#52627A]">{p.summary}</p>
                       </div>
 
-                      <div className="mt-5 flex items-center justify-end gap-2 border-t border-white/[0.07] pt-4">
+                      <div className="mt-5 flex items-center justify-end gap-2 border-t border-slate-100 pt-4">
                         <button
                           type="button"
                           onClick={() => setEditingProject(p)}
-                          className="inline-flex items-center gap-1.5 rounded-lg border border-white/12 px-3 py-1.5 text-xs text-white hover:border-[#00B8F4]"
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-[#09152B] hover:border-[#0052FF] hover:text-[#0052FF]"
                         >
                           <Pencil className="h-3.5 w-3.5" /> Edit
                         </button>
@@ -496,7 +496,7 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
                             await adminApi.deleteProject(p.id);
                             await refreshAfterMutation('Project removed.');
                           }}
-                          className="inline-flex items-center gap-1.5 rounded-lg border border-red-500/25 px-3 py-1.5 text-xs text-red-300 hover:bg-red-500/10"
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50"
                         >
                           <Trash2 className="h-3.5 w-3.5" /> Delete
                         </button>
@@ -512,8 +512,9 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
           {activeTab === 'clients' && (
             <div className="space-y-6">
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <p className="text-sm text-slate-400">
-                  Add client logos, industries, testimonials, and impact metrics shown across the site.
+                <p className="text-sm text-[#52627A]">
+                  Add client logos, industries, testimonials, and impact metrics shown across the
+                  site.
                 </p>
                 <button
                   type="button"
@@ -523,7 +524,7 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
                       order: clients.length + 1,
                     })
                   }
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#00B8F4] px-4 py-2.5 text-xs font-bold text-[#05070A] uppercase"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#0052FF] px-4 py-2.5 text-xs font-semibold text-white shadow-sm hover:bg-[#0040CC]"
                 >
                   <Plus className="h-4 w-4" /> Add Client
                 </button>
@@ -533,7 +534,7 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
                 {clients.map((c) => (
                   <div
                     key={c.id}
-                    className="flex flex-col justify-between rounded-2xl border border-white/[0.08] bg-[#0B0D12] p-5"
+                    className="flex flex-col justify-between rounded-2xl border border-[#DCE8FA] bg-white p-5 shadow-sm"
                   >
                     <div>
                       <div className="flex items-center justify-between">
@@ -544,34 +545,32 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
                             className="h-9 max-w-[130px] object-contain"
                           />
                         ) : (
-                          <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-[#00B8F4]/30 bg-[#00B8F4]/10 font-display text-sm font-bold text-[#00B8F4]">
+                          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#EFF6FF] font-display text-sm font-bold text-[#0052FF]">
                             {c.name.slice(0, 2).toUpperCase()}
                           </div>
                         )}
-                        <span className="text-[10px] text-slate-500 uppercase">
-                          {c.industry}
-                        </span>
+                        <span className="text-xs font-medium text-[#52627A]">{c.industry}</span>
                       </div>
-                      <h3 className="mt-4 font-display text-lg font-semibold text-white">
+                      <h3 className="mt-4 font-display text-lg font-semibold text-[#09152B]">
                         {c.name}
                       </h3>
                       {c.quote && (
-                        <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-slate-400">
+                        <p className="mt-2 line-clamp-3 text-xs leading-relaxed text-[#52627A]">
                           “{c.quote}”
                         </p>
                       )}
                       {c.impactMetric && (
-                        <div className="mt-3 text-[11px] text-emerald-400">
+                        <div className="mt-3 text-xs font-semibold text-[#0052FF]">
                           {c.impactMetric}
                         </div>
                       )}
                     </div>
 
-                    <div className="mt-5 flex items-center justify-end gap-2 border-t border-white/[0.07] pt-4">
+                    <div className="mt-5 flex items-center justify-end gap-2 border-t border-slate-100 pt-4">
                       <button
                         type="button"
                         onClick={() => setEditingClient(c)}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-white/12 px-3 py-1.5 text-xs text-white hover:border-[#00B8F4]"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-[#09152B] hover:border-[#0052FF] hover:text-[#0052FF]"
                       >
                         <Pencil className="h-3.5 w-3.5" /> Edit
                       </button>
@@ -582,7 +581,7 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
                           await adminApi.deleteClient(c.id);
                           await refreshAfterMutation('Client removed.');
                         }}
-                        className="inline-flex items-center gap-1.5 rounded-lg border border-red-500/25 px-3 py-1.5 text-xs text-red-300 hover:bg-red-500/10"
+                        className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50"
                       >
                         <Trash2 className="h-3.5 w-3.5" /> Delete
                       </button>
@@ -597,7 +596,7 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
           {activeTab === 'jobs' && (
             <div className="space-y-6">
               <div className="flex flex-wrap items-center justify-between gap-4">
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-[#52627A]">
                   Publish, pause, or update open positions live on the /careers portal.
                 </p>
                 <button
@@ -615,7 +614,7 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
                       techStack: [],
                     })
                   }
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#00B8F4] px-4 py-2.5 text-xs font-bold text-[#05070A] uppercase"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#0052FF] px-4 py-2.5 text-xs font-semibold text-white shadow-sm hover:bg-[#0040CC]"
                 >
                   <Plus className="h-4 w-4" /> Create Job Listing
                 </button>
@@ -627,31 +626,31 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
                   return (
                     <div
                       key={j.id}
-                      className="flex flex-col justify-between gap-4 rounded-2xl border border-white/[0.08] bg-[#0B0D12] p-6 sm:flex-row sm:items-center"
+                      className="flex flex-col justify-between gap-4 rounded-2xl border border-[#DCE8FA] bg-white p-6 shadow-sm sm:flex-row sm:items-center"
                     >
                       <div>
-                        <div className="flex flex-wrap items-center gap-2 text-[11px] uppercase">
+                        <div className="flex flex-wrap items-center gap-2 text-xs">
                           <span
-                            className={`rounded-full px-2.5 py-0.5 ${
+                            className={`rounded-full px-2.5 py-0.5 font-semibold capitalize ${
                               j.status === 'open'
-                                ? 'bg-emerald-500/15 text-emerald-300'
+                                ? 'bg-emerald-50 text-emerald-700'
                                 : j.status === 'paused'
-                                ? 'bg-amber-500/15 text-amber-300'
-                                : 'bg-slate-700/40 text-slate-400'
+                                ? 'bg-amber-50 text-amber-700'
+                                : 'bg-slate-100 text-slate-600'
                             }`}
                           >
                             {j.status}
                           </span>
-                          <span className="text-[#00B8F4]">{j.department}</span>
-                          <span className="text-slate-500">
-                            • {j.workMode} • {j.location}
+                          <span className="font-semibold text-[#0052FF]">{j.department}</span>
+                          <span className="text-[#52627A]">
+                            · {j.workMode} · {j.location}
                           </span>
                         </div>
-                        <h3 className="mt-2 font-display text-xl font-semibold text-white">
+                        <h3 className="mt-2 font-display text-xl font-semibold text-[#09152B]">
                           {j.title}
                         </h3>
-                        <p className="mt-1 text-xs text-slate-400">
-                          {appCount} applicant{appCount === 1 ? '' : 's'} • {j.employmentType} •{' '}
+                        <p className="mt-1 text-xs text-[#52627A]">
+                          {appCount} applicant{appCount === 1 ? '' : 's'} · {j.employmentType} ·{' '}
                           {j.experience}
                         </p>
                       </div>
@@ -665,7 +664,7 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
                             });
                             await refreshAfterMutation('Job status updated.');
                           }}
-                          className="rounded-lg border border-white/12 bg-[#060709] px-3 py-1.5 text-xs text-white"
+                          className="rounded-lg border border-slate-200 bg-[#F8FBFF] px-3 py-1.5 text-xs font-medium text-[#09152B]"
                         >
                           <option value="open">Open</option>
                           <option value="paused">Paused</option>
@@ -675,7 +674,7 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
                         <button
                           type="button"
                           onClick={() => setEditingJob(j)}
-                          className="inline-flex items-center gap-1.5 rounded-lg border border-white/12 px-3 py-1.5 text-xs text-white hover:border-[#00B8F4]"
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-medium text-[#09152B] hover:border-[#0052FF] hover:text-[#0052FF]"
                         >
                           <Pencil className="h-3.5 w-3.5" /> Edit
                         </button>
@@ -686,7 +685,7 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
                             await adminApi.deleteJob(j.id);
                             await refreshAfterMutation('Job listing deleted.');
                           }}
-                          className="inline-flex items-center gap-1.5 rounded-lg border border-red-500/25 px-3 py-1.5 text-xs text-red-300 hover:bg-red-500/10"
+                          className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 px-3 py-1.5 text-xs text-red-600 hover:bg-red-50"
                         >
                           <Trash2 className="h-3.5 w-3.5" />
                         </button>
@@ -702,7 +701,7 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
           {activeTab === 'applications' && (
             <div className="space-y-4">
               {applications.length === 0 ? (
-                <div className="rounded-2xl border border-white/[0.08] bg-[#0B0D12] p-12 text-center text-sm text-slate-400">
+                <div className="rounded-2xl border border-[#DCE8FA] bg-white p-12 text-center text-sm text-[#52627A]">
                   No candidate applications yet.
                 </div>
               ) : (
@@ -729,7 +728,7 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
           {activeTab === 'inquiries' && (
             <div className="space-y-4">
               {inquiries.length === 0 ? (
-                <div className="rounded-2xl border border-white/[0.08] bg-[#0B0D12] p-12 text-center text-sm text-slate-400">
+                <div className="rounded-2xl border border-[#DCE8FA] bg-white p-12 text-center text-sm text-[#52627A]">
                   No contact inquiries yet.
                 </div>
               ) : (
@@ -765,7 +764,7 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
         </main>
       </div>
 
-      {/* ---------------- PROJECT CREATE/EDIT MODAL ---------------- */}
+      {/* MODALS */}
       {editingProject && (
         <ProjectEditorModal
           initial={editingProject}
@@ -783,7 +782,6 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
         />
       )}
 
-      {/* ---------------- CLIENT CREATE/EDIT MODAL ---------------- */}
       {editingClient && (
         <ClientEditorModal
           initial={editingClient}
@@ -801,7 +799,6 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
         />
       )}
 
-      {/* ---------------- JOB CREATE/EDIT MODAL ---------------- */}
       {editingJob && (
         <JobEditorModal
           initial={editingJob}
@@ -823,7 +820,7 @@ export function AdminPortal({ onDataMutated }: { onDataMutated: () => void }) {
 }
 
 /* ========================================================================== */
-/* SUB-COMPONENTS FOR CLEAN ADMIN UX                                          */
+/* SUB-COMPONENTS                                                             */
 /* ========================================================================== */
 
 function ApplicationCard({
@@ -854,25 +851,27 @@ function ApplicationCard({
   };
 
   return (
-    <div className="rounded-2xl border border-white/[0.08] bg-[#0B0D12] p-6">
+    <div className="rounded-2xl border border-[#DCE8FA] bg-white p-6 shadow-sm">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <div className="text-[11px] text-[#00B8F4] uppercase">
-            {app.jobTitle} • {new Date(app.createdAt).toLocaleDateString()}
+          <div className="text-xs font-semibold text-[#0052FF]">
+            {app.jobTitle} · {new Date(app.createdAt).toLocaleDateString()}
           </div>
-          <h3 className="mt-1 font-display text-xl font-semibold text-white">{app.fullName}</h3>
-          <div className="mt-1 flex flex-wrap gap-3 text-xs text-slate-400">
-            <a href={`mailto:${app.email}`} className="hover:text-[#00B8F4]">
+          <h3 className="mt-1 font-display text-xl font-semibold text-[#09152B]">
+            {app.fullName}
+          </h3>
+          <div className="mt-1 flex flex-wrap gap-3 text-xs text-[#52627A]">
+            <a href={`mailto:${app.email}`} className="font-medium text-[#0052FF] hover:underline">
               {app.email}
             </a>
-            {app.phone && <span>• {app.phone}</span>}
-            {app.experienceYears && <span>• {app.experienceYears}</span>}
+            {app.phone && <span>· {app.phone}</span>}
+            {app.experienceYears && <span>· {app.experienceYears}</span>}
             {app.portfolioUrl && (
               <a
                 href={app.portfolioUrl}
                 target="_blank"
                 rel="noreferrer"
-                className="text-[#00B8F4] underline"
+                className="font-medium text-[#0052FF] underline"
               >
                 Portfolio / GitHub
               </a>
@@ -885,7 +884,7 @@ function ApplicationCard({
             <button
               type="button"
               onClick={downloadResume}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-[#00B8F4]/40 bg-[#00B8F4]/10 px-3 py-1.5 text-xs font-medium text-[#00B8F4] hover:bg-[#00B8F4] hover:text-[#05070A]"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-[#EFF6FF] px-3 py-1.5 text-xs font-semibold text-[#0052FF] hover:bg-[#0052FF] hover:text-white"
             >
               <Download className="h-3.5 w-3.5" />
               Resume ({app.resumeOriginalName || 'CV'})
@@ -894,7 +893,7 @@ function ApplicationCard({
           <select
             value={app.status}
             onChange={(e) => onUpdate({ status: e.target.value as Application['status'] })}
-            className="rounded-lg border border-white/12 bg-[#060709] px-3 py-1.5 text-xs text-white"
+            className="rounded-lg border border-slate-200 bg-[#F8FBFF] px-3 py-1.5 text-xs font-medium text-[#09152B]"
           >
             <option value="new">New</option>
             <option value="reviewing">Reviewing</option>
@@ -905,7 +904,7 @@ function ApplicationCard({
           <button
             type="button"
             onClick={onDelete}
-            className="rounded-lg border border-red-500/25 p-1.5 text-red-300 hover:bg-red-500/10"
+            className="rounded-lg border border-red-200 p-1.5 text-red-600 hover:bg-red-50"
           >
             <Trash2 className="h-4 w-4" />
           </button>
@@ -913,7 +912,7 @@ function ApplicationCard({
       </div>
 
       {app.coverNote && (
-        <p className="mt-4 rounded-xl border border-white/[0.06] bg-[#060709] p-4 text-sm leading-relaxed text-slate-300">
+        <p className="mt-4 rounded-xl bg-[#F5F8FD] p-4 text-sm leading-relaxed text-[#334155]">
           {app.coverNote}
         </p>
       )}
@@ -924,12 +923,12 @@ function ApplicationCard({
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           placeholder="Internal recruiter notes..."
-          className="flex-1 rounded-lg border border-white/10 bg-[#060709] px-3 py-2 text-xs text-white"
+          className="flex-1 rounded-lg border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B]"
         />
         <button
           type="button"
           onClick={() => onUpdate({ notes })}
-          className="rounded-lg border border-white/15 px-3.5 py-2 text-xs font-medium text-white hover:border-[#00B8F4]"
+          className="rounded-lg border border-slate-200 px-3.5 py-2 text-xs font-semibold text-[#09152B] hover:border-[#0052FF] hover:text-[#0052FF]"
         >
           Save Note
         </button>
@@ -951,39 +950,41 @@ function InquiryCard({
 
   return (
     <div
-      className={`rounded-2xl border bg-[#0B0D12] p-6 ${
-        !inq.read ? 'border-[#00B8F4]/40' : 'border-white/[0.08]'
+      className={`rounded-2xl border bg-white p-6 shadow-sm ${
+        !inq.read ? 'border-[#0052FF]/45 ring-1 ring-[#0052FF]/10' : 'border-[#DCE8FA]'
       }`}
     >
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-[11px] text-[#00B8F4] uppercase">
+          <div className="flex items-center gap-2 text-xs font-semibold text-[#0052FF]">
             <span>{inq.ticketId}</span>
-            <span>•</span>
-            <span className="text-slate-400">{new Date(inq.createdAt).toLocaleString()}</span>
+            <span>·</span>
+            <span className="font-normal text-[#52627A]">
+              {new Date(inq.createdAt).toLocaleString()}
+            </span>
             {!inq.read && (
-              <span className="rounded bg-[#00B8F4] px-1.5 py-0.5 text-[9px] font-bold text-[#05070A]">
-                NEW
+              <span className="rounded-full bg-[#0052FF] px-2 py-0.5 text-[10px] font-semibold text-white">
+                New
               </span>
             )}
           </div>
-          <h3 className="mt-1 font-display text-xl font-semibold text-white">
+          <h3 className="mt-1 font-display text-xl font-semibold text-[#09152B]">
             {inq.fullName} {inq.company ? `— ${inq.company}` : ''}
           </h3>
-          <div className="mt-1 flex flex-wrap gap-3 text-xs text-slate-400">
-            <a href={`mailto:${inq.email}`} className="text-[#00B8F4] hover:underline">
+          <div className="mt-1 flex flex-wrap gap-3 text-xs text-[#52627A]">
+            <a href={`mailto:${inq.email}`} className="font-medium text-[#0052FF] hover:underline">
               {inq.email}
             </a>
-            {inq.phone && <span>• {inq.phone}</span>}
-            <span>• Budget: {inq.budget}</span>
-            <span>• Timeline: {inq.timeline}</span>
+            {inq.phone && <span>· {inq.phone}</span>}
+            <span>· Budget: {inq.budget}</span>
+            <span>· Timeline: {inq.timeline}</span>
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
           <a
             href={`mailto:${inq.email}?subject=Re: FusionLabz Inquiry ${inq.ticketId}`}
-            className="rounded-lg border border-[#00B8F4]/40 bg-[#00B8F4]/10 px-3 py-1.5 text-xs font-medium text-[#00B8F4]"
+            className="rounded-lg bg-[#EFF6FF] px-3 py-1.5 text-xs font-semibold text-[#0052FF] hover:bg-[#0052FF] hover:text-white"
           >
             Reply via Email
           </a>
@@ -992,7 +993,7 @@ function InquiryCard({
             onChange={(e) =>
               onUpdate({ status: e.target.value as Inquiry['status'], read: true })
             }
-            className="rounded-lg border border-white/12 bg-[#060709] px-3 py-1.5 text-xs text-white"
+            className="rounded-lg border border-slate-200 bg-[#F8FBFF] px-3 py-1.5 text-xs font-medium text-[#09152B]"
           >
             <option value="new">New</option>
             <option value="contacted">Contacted</option>
@@ -1002,7 +1003,7 @@ function InquiryCard({
           <button
             type="button"
             onClick={onDelete}
-            className="rounded-lg border border-red-500/25 p-1.5 text-red-300 hover:bg-red-500/10"
+            className="rounded-lg border border-red-200 p-1.5 text-red-600 hover:bg-red-50"
           >
             <Trash2 className="h-4 w-4" />
           </button>
@@ -1014,7 +1015,7 @@ function InquiryCard({
           {inq.services.map((s) => (
             <span
               key={s}
-              className="rounded-full border border-white/10 bg-white/[0.03] px-2.5 py-0.5 text-[10px] text-slate-300"
+              className="rounded-full bg-[#EFF6FF] px-2.5 py-0.5 text-[11px] font-medium text-[#1D4ED8]"
             >
               {s}
             </span>
@@ -1022,7 +1023,7 @@ function InquiryCard({
         </div>
       )}
 
-      <p className="mt-4 rounded-xl border border-white/[0.06] bg-[#060709] p-4 text-sm leading-relaxed whitespace-pre-wrap text-slate-300">
+      <p className="mt-4 rounded-xl bg-[#F5F8FD] p-4 text-sm leading-relaxed whitespace-pre-wrap text-[#334155]">
         {inq.message}
       </p>
 
@@ -1032,12 +1033,12 @@ function InquiryCard({
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           placeholder="Internal follow-up notes..."
-          className="flex-1 rounded-lg border border-white/10 bg-[#060709] px-3 py-2 text-xs text-white"
+          className="flex-1 rounded-lg border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B]"
         />
         <button
           type="button"
           onClick={() => onUpdate({ notes, read: true })}
-          className="rounded-lg border border-white/15 px-3.5 py-2 text-xs font-medium text-white hover:border-[#00B8F4]"
+          className="rounded-lg border border-slate-200 px-3.5 py-2 text-xs font-semibold text-[#09152B] hover:border-[#0052FF] hover:text-[#0052FF]"
         >
           Save Note
         </button>
@@ -1087,47 +1088,45 @@ function ProjectEditorModal({
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSaving(true);
-    try {
-      await onSave({
-        title,
-        type,
-        category,
-        clientName,
-        year,
-        summary,
-        challenge,
-        solution,
-        impact,
-        techStack: techStackText
-          .split(',')
-          .map((s) => s.trim())
-          .filter(Boolean),
-        metrics: metrics.filter((m) => m.label.trim() && m.value.trim()),
-        coverImage,
-        liveUrl,
-        featured,
-        published,
-        order: Number(order) || 1,
-      });
-    } finally {
-      setSaving(false);
-    }
-  };
-
   return (
-    <div className="fixed inset-0 z-[95] flex items-center justify-center bg-black/80 p-3 backdrop-blur-md">
+    <div className="fixed inset-0 z-[95] flex items-center justify-center bg-[#06132E]/60 p-3 backdrop-blur-md">
       <form
-        onSubmit={handleSubmit}
-        className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-white/15 bg-[#080C14] p-6 sm:p-8"
+        onSubmit={async (e) => {
+          e.preventDefault();
+          setSaving(true);
+          try {
+            await onSave({
+              title,
+              type,
+              category,
+              clientName,
+              year,
+              summary,
+              challenge,
+              solution,
+              impact,
+              techStack: techStackText
+                .split(',')
+                .map((s) => s.trim())
+                .filter(Boolean),
+              metrics: metrics.filter((m) => m.label.trim() && m.value.trim()),
+              coverImage,
+              liveUrl,
+              featured,
+              published,
+              order: Number(order) || 1,
+            });
+          } finally {
+            setSaving(false);
+          }
+        }}
+        className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl sm:p-8"
       >
-        <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
-          <h2 className="font-display text-xl font-semibold text-white">
+        <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+          <h2 className="font-display text-xl font-semibold text-[#09152B]">
             {initial.id ? 'Edit Project / Product' : 'Add New Project / Product'}
           </h2>
-          <button type="button" onClick={onClose} className="text-slate-400 hover:text-white">
+          <button type="button" onClick={onClose} className="text-slate-400 hover:text-[#09152B]">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -1135,50 +1134,42 @@ function ProjectEditorModal({
         <div className="mt-6 space-y-5 text-sm">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Project Title *
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Project Title *</label>
               <input
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-[#09152B]"
               />
             </div>
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Client / Suite Name
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Client / Suite</label>
               <input
                 value={clientName}
                 onChange={(e) => setClientName(e.target.value)}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-[#09152B]"
               />
             </div>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-4">
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Type
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Type</label>
               <select
                 value={type}
                 onChange={(e) => setType(e.target.value)}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2.5 text-[#09152B]"
               >
                 <option value="Portfolio Project">Portfolio Project</option>
                 <option value="Flagship Product">Flagship Product</option>
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Category
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Category</label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2.5 text-[#09152B]"
               >
                 <option value="Enterprise Software">Enterprise Software</option>
                 <option value="Web & SaaS">Web & SaaS</option>
@@ -1189,31 +1180,26 @@ function ProjectEditorModal({
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Year
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Year</label>
               <input
                 value={year}
                 onChange={(e) => setYear(e.target.value)}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2.5 text-[#09152B]"
               />
             </div>
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Sort Order
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Sort Order</label>
               <input
                 type="number"
                 value={order}
                 onChange={(e) => setOrder(Number(e.target.value))}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2.5 text-[#09152B]"
               />
             </div>
           </div>
 
-          {/* Cover Image Upload */}
           <div>
-            <label className="mb-1.5 block text-[11px] text-slate-400 uppercase">
+            <label className="mb-1.5 block text-xs font-medium text-[#334155]">
               Cover Showcase Image
             </label>
             <div className="flex flex-wrap items-center gap-3">
@@ -1221,9 +1207,9 @@ function ProjectEditorModal({
                 value={coverImage}
                 onChange={(e) => setCoverImage(e.target.value)}
                 placeholder="/uploads/projects/... or https://..."
-                className="flex-1 rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-xs text-white"
+                className="flex-1 rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-xs text-[#09152B]"
               />
-              <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-[#00B8F4]/40 bg-[#00B8F4]/10 px-4 py-2.5 text-xs font-medium text-[#00B8F4] hover:bg-[#00B8F4] hover:text-[#05070A]">
+              <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-[#EFF6FF] px-4 py-2.5 text-xs font-semibold text-[#0052FF] hover:bg-[#0052FF] hover:text-white">
                 <Upload className="h-3.5 w-3.5" />
                 {uploading ? 'Uploading...' : 'Upload Image'}
                 <input
@@ -1238,95 +1224,82 @@ function ProjectEditorModal({
               <img
                 src={coverImage}
                 alt="Preview"
-                className="mt-3 h-36 w-full rounded-xl border border-white/10 object-cover"
+                className="mt-3 h-36 w-full rounded-xl border border-slate-200 object-cover"
               />
             )}
           </div>
 
           <div>
-            <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-              Executive Summary *
-            </label>
+            <label className="mb-1 block text-xs font-medium text-[#334155]">Summary *</label>
             <textarea
               required
               rows={2}
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
-              className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-white"
+              className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-[#09152B]"
             />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-3">
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Challenge
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Challenge</label>
               <textarea
                 rows={3}
                 value={challenge}
                 onChange={(e) => setChallenge(e.target.value)}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3 py-2 text-xs text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B]"
               />
             </div>
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Engineering Solution
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Approach</label>
               <textarea
                 rows={3}
                 value={solution}
                 onChange={(e) => setSolution(e.target.value)}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3 py-2 text-xs text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B]"
               />
             </div>
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Verified Impact
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Outcome</label>
               <textarea
                 rows={3}
                 value={impact}
                 onChange={(e) => setImpact(e.target.value)}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3 py-2 text-xs text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B]"
               />
             </div>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
+              <label className="mb-1 block text-xs font-medium text-[#334155]">
                 Tech Stack (comma separated)
               </label>
               <input
                 value={techStackText}
                 onChange={(e) => setTechStackText(e.target.value)}
-                placeholder="TypeScript, React, Node.js, PostgreSQL"
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-xs text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-xs text-[#09152B]"
               />
             </div>
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
+              <label className="mb-1 block text-xs font-medium text-[#334155]">
                 Live URL (optional)
               </label>
               <input
                 value={liveUrl}
                 onChange={(e) => setLiveUrl(e.target.value)}
-                placeholder="https://..."
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-xs text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-xs text-[#09152B]"
               />
             </div>
           </div>
 
-          {/* Metrics Builder */}
           <div>
             <div className="mb-2 flex items-center justify-between">
-              <label className="text-[11px] text-slate-400 uppercase">
-                Key Metrics (up to 3)
-              </label>
+              <label className="text-xs font-medium text-[#334155]">Key Metrics (up to 3)</label>
               <button
                 type="button"
                 onClick={() => setMetrics((m) => [...m, { label: '', value: '' }])}
-                className="text-[11px] text-[#00B8F4]"
+                className="text-xs font-semibold text-[#0052FF]"
               >
                 + Add Metric
               </button>
@@ -1342,7 +1315,7 @@ function ProjectEditorModal({
                       )
                     }
                     placeholder="e.g. 99.98%"
-                    className="w-36 rounded-lg border border-white/12 bg-[#060709] px-3 py-2 text-xs text-white"
+                    className="w-36 rounded-lg border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B]"
                   />
                   <input
                     value={m.label}
@@ -1352,12 +1325,12 @@ function ProjectEditorModal({
                       )
                     }
                     placeholder="e.g. Uptime SLA"
-                    className="flex-1 rounded-lg border border-white/12 bg-[#060709] px-3 py-2 text-xs text-white"
+                    className="flex-1 rounded-lg border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B]"
                   />
                   <button
                     type="button"
                     onClick={() => setMetrics((arr) => arr.filter((_, i) => i !== idx))}
-                    className="px-2 text-slate-500 hover:text-red-400"
+                    className="px-2 text-slate-400 hover:text-red-500"
                   >
                     <X className="h-4 w-4" />
                   </button>
@@ -1367,39 +1340,39 @@ function ProjectEditorModal({
           </div>
 
           <div className="flex items-center gap-6">
-            <label className="flex items-center gap-2 text-xs text-slate-300">
+            <label className="flex items-center gap-2 text-xs font-medium text-[#334155]">
               <input
                 type="checkbox"
                 checked={featured}
                 onChange={(e) => setFeatured(e.target.checked)}
-                className="accent-[#00B8F4]"
+                className="accent-[#0052FF]"
               />
-              Featured on Home Horizontal Showcase
+              Featured on Home
             </label>
-            <label className="flex items-center gap-2 text-xs text-slate-300">
+            <label className="flex items-center gap-2 text-xs font-medium text-[#334155]">
               <input
                 type="checkbox"
                 checked={published}
                 onChange={(e) => setPublished(e.target.checked)}
-                className="accent-[#00B8F4]"
+                className="accent-[#0052FF]"
               />
               Published Live
             </label>
           </div>
         </div>
 
-        <div className="mt-7 flex justify-end gap-3 border-t border-white/[0.08] pt-5">
+        <div className="mt-7 flex justify-end gap-3 border-t border-slate-200 pt-5">
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl border border-white/15 px-5 py-2.5 text-xs text-slate-300"
+            className="rounded-xl border border-slate-200 px-5 py-2.5 text-xs font-medium text-slate-600"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="rounded-xl bg-[#00B8F4] px-6 py-2.5 text-xs font-bold text-[#05070A] uppercase hover:bg-white"
+            className="rounded-xl bg-[#0052FF] px-6 py-2.5 text-xs font-semibold text-white hover:bg-[#0040CC]"
           >
             {saving ? 'Saving...' : 'Save Project'}
           </button>
@@ -1442,7 +1415,7 @@ function ClientEditorModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[95] flex items-center justify-center bg-black/80 p-3 backdrop-blur-md">
+    <div className="fixed inset-0 z-[95] flex items-center justify-center bg-[#06132E]/60 p-3 backdrop-blur-md">
       <form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -1463,13 +1436,13 @@ function ClientEditorModal({
             setSaving(false);
           }
         }}
-        className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-white/15 bg-[#080C14] p-6 sm:p-8"
+        className="max-h-[92vh] w-full max-w-2xl overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl sm:p-8"
       >
-        <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
-          <h2 className="font-display text-xl font-semibold text-white">
+        <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+          <h2 className="font-display text-xl font-semibold text-[#09152B]">
             {initial.id ? 'Edit Client' : 'Add New Client'}
           </h2>
-          <button type="button" onClick={onClose} className="text-slate-400 hover:text-white">
+          <button type="button" onClick={onClose} className="text-slate-400 hover:text-[#09152B]">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -1477,66 +1450,55 @@ function ClientEditorModal({
         <div className="mt-6 space-y-4 text-sm">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Client / Company Name *
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Client Name *</label>
               <input
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-[#09152B]"
               />
             </div>
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Industry
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Industry</label>
               <input
                 value={industry}
                 onChange={(e) => setIndustry(e.target.value)}
-                placeholder="FinTech, Retail, Healthcare..."
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-[#09152B]"
               />
             </div>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Website URL
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Website URL</label>
               <input
                 value={website}
                 onChange={(e) => setWebsite(e.target.value)}
-                placeholder="https://..."
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-[#09152B]"
               />
             </div>
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Impact Metric Highlight
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Impact Metric</label>
               <input
                 value={impactMetric}
                 onChange={(e) => setImpactMetric(e.target.value)}
-                placeholder="e.g. 2.8x conversion lift"
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-[#09152B]"
               />
             </div>
           </div>
 
           <div>
-            <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-              Client Logo (optional — auto monogram used if blank)
+            <label className="mb-1 block text-xs font-medium text-[#334155]">
+              Client Logo (optional)
             </label>
             <div className="flex items-center gap-3">
               <input
                 value={logoUrl}
                 onChange={(e) => setLogoUrl(e.target.value)}
                 placeholder="/uploads/clients/..."
-                className="flex-1 rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-xs text-white"
+                className="flex-1 rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-xs text-[#09152B]"
               />
-              <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl border border-[#00B8F4]/40 bg-[#00B8F4]/10 px-4 py-2.5 text-xs font-medium text-[#00B8F4]">
+              <label className="inline-flex cursor-pointer items-center gap-2 rounded-xl bg-[#EFF6FF] px-4 py-2.5 text-xs font-semibold text-[#0052FF] hover:bg-[#0052FF] hover:text-white">
                 <Upload className="h-3.5 w-3.5" />
                 {uploading ? 'Uploading...' : 'Upload Logo'}
                 <input
@@ -1550,63 +1512,57 @@ function ClientEditorModal({
           </div>
 
           <div>
-            <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-              Client Testimonial Quote
-            </label>
+            <label className="mb-1 block text-xs font-medium text-[#334155]">Testimonial Quote</label>
             <textarea
               rows={3}
               value={quote}
               onChange={(e) => setQuote(e.target.value)}
-              className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-white"
+              className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-[#09152B]"
             />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Author Name
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Author Name</label>
               <input
                 value={authorName}
                 onChange={(e) => setAuthorName(e.target.value)}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-[#09152B]"
               />
             </div>
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Author Role
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Author Role</label>
               <input
                 value={authorRole}
                 onChange={(e) => setAuthorRole(e.target.value)}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-[#09152B]"
               />
             </div>
           </div>
 
-          <label className="flex items-center gap-2 text-xs text-slate-300">
+          <label className="flex items-center gap-2 text-xs font-medium text-[#334155]">
             <input
               type="checkbox"
               checked={featured}
               onChange={(e) => setFeatured(e.target.checked)}
-              className="accent-[#00B8F4]"
+              className="accent-[#0052FF]"
             />
             Featured Client
           </label>
         </div>
 
-        <div className="mt-7 flex justify-end gap-3 border-t border-white/[0.08] pt-5">
+        <div className="mt-7 flex justify-end gap-3 border-t border-slate-200 pt-5">
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl border border-white/15 px-5 py-2.5 text-xs text-slate-300"
+            className="rounded-xl border border-slate-200 px-5 py-2.5 text-xs font-medium text-slate-600"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="rounded-xl bg-[#00B8F4] px-6 py-2.5 text-xs font-bold text-[#05070A] uppercase"
+            className="rounded-xl bg-[#0052FF] px-6 py-2.5 text-xs font-semibold text-white hover:bg-[#0040CC]"
           >
             {saving ? 'Saving...' : 'Save Client'}
           </button>
@@ -1623,7 +1579,13 @@ function JobEditorModal({
 }: {
   initial: Partial<Job>;
   onClose: () => void;
-  onSave: (payload: Partial<Job> & { responsibilities: string[]; requirements: string[]; techStack: string[] }) => Promise<void>;
+  onSave: (
+    payload: Partial<Job> & {
+      responsibilities: string[];
+      requirements: string[];
+      techStack: string[];
+    }
+  ) => Promise<void>;
 }) {
   const [title, setTitle] = useState(initial.title || '');
   const [department, setDepartment] = useState(initial.department || 'Core Engineering');
@@ -1640,7 +1602,7 @@ function JobEditorModal({
   const [saving, setSaving] = useState(false);
 
   return (
-    <div className="fixed inset-0 z-[95] flex items-center justify-center bg-black/80 p-3 backdrop-blur-md">
+    <div className="fixed inset-0 z-[95] flex items-center justify-center bg-[#06132E]/60 p-3 backdrop-blur-md">
       <form
         onSubmit={async (e) => {
           e.preventDefault();
@@ -1673,13 +1635,13 @@ function JobEditorModal({
             setSaving(false);
           }
         }}
-        className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-white/15 bg-[#080C14] p-6 sm:p-8"
+        className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl sm:p-8"
       >
-        <div className="flex items-center justify-between border-b border-white/[0.08] pb-4">
-          <h2 className="font-display text-xl font-semibold text-white">
+        <div className="flex items-center justify-between border-b border-slate-200 pb-4">
+          <h2 className="font-display text-xl font-semibold text-[#09152B]">
             {initial.id ? 'Edit Job Listing' : 'Create New Job Listing'}
           </h2>
-          <button type="button" onClick={onClose} className="text-slate-400 hover:text-white">
+          <button type="button" onClick={onClose} className="text-slate-400 hover:text-[#09152B]">
             <X className="h-5 w-5" />
           </button>
         </div>
@@ -1687,38 +1649,31 @@ function JobEditorModal({
         <div className="mt-6 space-y-4 text-sm">
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Job Title *
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Job Title *</label>
               <input
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="Senior Full-Stack Engineer"
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-[#09152B]"
               />
             </div>
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Department
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Department</label>
               <input
                 value={department}
                 onChange={(e) => setDepartment(e.target.value)}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-[#09152B]"
               />
             </div>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-4">
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Work Mode
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Work Mode</label>
               <select
                 value={workMode}
                 onChange={(e) => setWorkMode(e.target.value)}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2.5 text-[#09152B]"
               >
                 <option value="Hybrid">Hybrid</option>
                 <option value="Remote">Remote</option>
@@ -1726,13 +1681,11 @@ function JobEditorModal({
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Type
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Type</label>
               <select
                 value={employmentType}
                 onChange={(e) => setEmploymentType(e.target.value)}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2.5 text-[#09152B]"
               >
                 <option value="Full-time">Full-time</option>
                 <option value="Contract">Contract</option>
@@ -1740,23 +1693,19 @@ function JobEditorModal({
               </select>
             </div>
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Experience
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Experience</label>
               <input
                 value={experience}
                 onChange={(e) => setExperience(e.target.value)}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2.5 text-[#09152B]"
               />
             </div>
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Status
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Status</label>
               <select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as Job['status'])}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2.5 text-[#09152B]"
               >
                 <option value="open">Open</option>
                 <option value="paused">Paused</option>
@@ -1767,90 +1716,83 @@ function JobEditorModal({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Location
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Location</label>
               <input
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-[#09152B]"
               />
             </div>
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-                Compensation Range
-              </label>
+              <label className="mb-1 block text-xs font-medium text-[#334155]">Compensation</label>
               <input
                 value={salaryRange}
                 onChange={(e) => setSalaryRange(e.target.value)}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-[#09152B]"
               />
             </div>
           </div>
 
           <div>
-            <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-              Role Overview *
-            </label>
+            <label className="mb-1 block text-xs font-medium text-[#334155]">Role Overview *</label>
             <textarea
               required
               rows={2}
               value={summary}
               onChange={(e) => setSummary(e.target.value)}
-              className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-white"
+              className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-[#09152B]"
             />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
+              <label className="mb-1 block text-xs font-medium text-[#334155]">
                 Responsibilities (one per line)
               </label>
               <textarea
                 rows={5}
                 value={respText}
                 onChange={(e) => setRespText(e.target.value)}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-xs text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-xs text-[#09152B]"
               />
             </div>
             <div>
-              <label className="mb-1 block text-[11px] text-slate-400 uppercase">
+              <label className="mb-1 block text-xs font-medium text-[#334155]">
                 Requirements (one per line)
               </label>
               <textarea
                 rows={5}
                 value={reqText}
                 onChange={(e) => setReqText(e.target.value)}
-                className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-xs text-white"
+                className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-xs text-[#09152B]"
               />
             </div>
           </div>
 
           <div>
-            <label className="mb-1 block text-[11px] text-slate-400 uppercase">
+            <label className="mb-1 block text-xs font-medium text-[#334155]">
               Tech Stack (comma separated)
             </label>
             <input
               value={stackText}
               onChange={(e) => setStackText(e.target.value)}
-              placeholder="TypeScript, React, Node.js, AWS"
-              className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-xs text-white"
+              className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-xs text-[#09152B]"
             />
           </div>
         </div>
 
-        <div className="mt-7 flex justify-end gap-3 border-t border-white/[0.08] pt-5">
+        <div className="mt-7 flex justify-end gap-3 border-t border-slate-200 pt-5">
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl border border-white/15 px-5 py-2.5 text-xs text-slate-300"
+            className="rounded-xl border border-slate-200 px-5 py-2.5 text-xs font-medium text-slate-600"
           >
             Cancel
           </button>
           <button
             type="submit"
             disabled={saving}
-            className="rounded-xl bg-[#00B8F4] px-6 py-2.5 text-xs font-bold text-[#05070A] uppercase"
+            className="rounded-xl bg-[#0052FF] px-6 py-2.5 text-xs font-semibold text-white hover:bg-[#0040CC]"
           >
             {saving ? 'Saving...' : 'Publish Role'}
           </button>
@@ -1907,73 +1849,65 @@ function SettingsPanel({
             onError(err instanceof Error ? err.message : 'Save failed.');
           }
         }}
-        className="space-y-6 rounded-2xl border border-white/[0.08] bg-[#0B0D12] p-6 lg:col-span-7"
+        className="space-y-6 rounded-2xl border border-[#DCE8FA] bg-white p-6 shadow-sm lg:col-span-7"
       >
-        <h2 className="font-display text-lg font-semibold text-white">
+        <h2 className="font-display text-lg font-semibold text-[#09152B]">
           Company Profile & Contact Details
         </h2>
 
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-              Company Name
-            </label>
+            <label className="mb-1 block text-xs font-medium text-[#334155]">Company Name</label>
             <input
               value={form.companyName}
               onChange={(e) => setForm({ ...form, companyName: e.target.value })}
-              className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-sm text-white"
+              className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
             />
           </div>
           <div>
-            <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-              Contact Email
-            </label>
+            <label className="mb-1 block text-xs font-medium text-[#334155]">Contact Email</label>
             <input
               value={form.email}
               onChange={(e) => setForm({ ...form, email: e.target.value })}
-              className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-sm text-white"
+              className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
             />
           </div>
           <div>
-            <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-              Phone / WhatsApp
-            </label>
+            <label className="mb-1 block text-xs font-medium text-[#334155]">Phone / WhatsApp</label>
             <input
               value={form.phone}
               onChange={(e) => setForm({ ...form, phone: e.target.value })}
-              className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-sm text-white"
+              className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
             />
           </div>
           <div>
-            <label className="mb-1 block text-[11px] text-slate-400 uppercase">
-              Global Presence Line
-            </label>
+            <label className="mb-1 block text-xs font-medium text-[#334155]">Global Presence</label>
             <input
               value={form.globalReach}
               onChange={(e) => setForm({ ...form, globalReach: e.target.value })}
-              className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-sm text-white"
+              className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
             />
           </div>
         </div>
 
         <div>
-          <label className="mb-1 block text-[11px] text-slate-400 uppercase">
+          <label className="mb-1 block text-xs font-medium text-[#334155]">
             Headquarters Address
           </label>
           <input
             value={form.address}
             onChange={(e) => setForm({ ...form, address: e.target.value })}
-            className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-sm text-white"
+            className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
           />
         </div>
 
-        <div className="border-t border-white/[0.08] pt-5">
-          <h3 className="font-display text-sm font-semibold text-white">
+        <div className="border-t border-slate-100 pt-5">
+          <h3 className="font-display text-sm font-semibold text-[#09152B]">
             Optional SMTP Email Alerts
           </h3>
-          <p className="mt-1 text-xs text-slate-500">
-            Configure your shared hosting SMTP credentials to receive instant emails when inquiries
-            or job applications arrive.
+          <p className="mt-1 text-xs text-[#52627A]">
+            Configure your shared hosting SMTP credentials to receive instant emails on new
+            inquiries or job applications.
           </p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
             <input
@@ -1982,16 +1916,16 @@ function SettingsPanel({
               onChange={(e) =>
                 setForm({ ...form, smtp: { ...(form.smtp as any), host: e.target.value } })
               }
-              className="rounded-xl border border-white/12 bg-[#060709] px-3 py-2 text-xs text-white"
+              className="rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B]"
             />
             <input
-              placeholder="SMTP Port (e.g. 587 or 465)"
+              placeholder="SMTP Port (587 or 465)"
               type="number"
               value={form.smtp?.port || 587}
               onChange={(e) =>
                 setForm({ ...form, smtp: { ...(form.smtp as any), port: Number(e.target.value) } })
               }
-              className="rounded-xl border border-white/12 bg-[#060709] px-3 py-2 text-xs text-white"
+              className="rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B]"
             />
             <input
               placeholder="SMTP Username"
@@ -1999,7 +1933,7 @@ function SettingsPanel({
               onChange={(e) =>
                 setForm({ ...form, smtp: { ...(form.smtp as any), user: e.target.value } })
               }
-              className="rounded-xl border border-white/12 bg-[#060709] px-3 py-2 text-xs text-white"
+              className="rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B]"
             />
             <input
               placeholder="SMTP Password"
@@ -2008,7 +1942,7 @@ function SettingsPanel({
               onChange={(e) =>
                 setForm({ ...form, smtp: { ...(form.smtp as any), pass: e.target.value } })
               }
-              className="rounded-xl border border-white/12 bg-[#060709] px-3 py-2 text-xs text-white"
+              className="rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B]"
             />
             <input
               placeholder="Notification Recipient Email"
@@ -2016,20 +1950,19 @@ function SettingsPanel({
               onChange={(e) =>
                 setForm({ ...form, smtp: { ...(form.smtp as any), notifyEmail: e.target.value } })
               }
-              className="rounded-xl border border-white/12 bg-[#060709] px-3 py-2 text-xs text-white sm:col-span-2"
+              className="rounded-xl border border-slate-200 bg-[#F8FBFF] px-3 py-2 text-xs text-[#09152B] sm:col-span-2"
             />
           </div>
         </div>
 
         <button
           type="submit"
-          className="rounded-xl bg-[#00B8F4] px-6 py-3 text-xs font-bold text-[#05070A] uppercase hover:bg-white"
+          className="rounded-xl bg-[#0052FF] px-6 py-2.5 text-xs font-semibold text-white shadow-sm hover:bg-[#0040CC]"
         >
           Save Settings
         </button>
       </form>
 
-      {/* Right Column: Security & Backup */}
       <div className="space-y-6 lg:col-span-5">
         <form
           onSubmit={async (e) => {
@@ -2049,23 +1982,23 @@ function SettingsPanel({
               onError(err instanceof Error ? err.message : 'Unable to update credentials.');
             }
           }}
-          className="space-y-4 rounded-2xl border border-white/[0.08] bg-[#0B0D12] p-6"
+          className="space-y-4 rounded-2xl border border-[#DCE8FA] bg-white p-6 shadow-sm"
         >
-          <h2 className="font-display text-lg font-semibold text-white">
+          <h2 className="font-display text-lg font-semibold text-[#09152B]">
             Admin Credentials & Security
           </h2>
           <input
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
             placeholder="Admin Display Name"
-            className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-sm text-white"
+            className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
           />
           <input
             type="email"
             value={newEmail}
             onChange={(e) => setNewEmail(e.target.value)}
             placeholder="Admin Login Email"
-            className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-sm text-white"
+            className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
           />
           <input
             type="password"
@@ -2073,35 +2006,35 @@ function SettingsPanel({
             value={currentPassword}
             onChange={(e) => setCurrentPassword(e.target.value)}
             placeholder="Current Password (required)"
-            className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-sm text-white"
+            className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
           />
           <input
             type="password"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
             placeholder="New Password (min 8 chars, optional)"
-            className="w-full rounded-xl border border-white/12 bg-[#060709] px-3.5 py-2.5 text-sm text-white"
+            className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
           />
           <button
             type="submit"
-            className="w-full rounded-xl border border-[#00B8F4]/50 bg-[#00B8F4]/15 py-3 text-xs font-bold text-[#00B8F4] uppercase hover:bg-[#00B8F4] hover:text-[#05070A]"
+            className="w-full rounded-xl bg-[#EFF6FF] py-2.5 text-xs font-semibold text-[#0052FF] hover:bg-[#0052FF] hover:text-white"
           >
             Update Credentials
           </button>
         </form>
 
-        <div className="rounded-2xl border border-white/[0.08] bg-[#0B0D12] p-6">
-          <h3 className="font-display text-base font-semibold text-white">Database Backup</h3>
-          <p className="mt-1.5 text-xs text-slate-400">
+        <div className="rounded-2xl border border-[#DCE8FA] bg-white p-6 shadow-sm">
+          <h3 className="font-display text-base font-semibold text-[#09152B]">Database Backup</h3>
+          <p className="mt-1.5 text-xs text-[#52627A]">
             Export a full portable JSON snapshot of your projects, clients, jobs, applications, and
             inquiries.
           </p>
           <button
             type="button"
             onClick={downloadBackup}
-            className="mt-4 inline-flex items-center gap-2 rounded-xl border border-white/15 px-4 py-2.5 text-xs font-medium text-white hover:border-[#00B8F4]"
+            className="mt-4 inline-flex items-center gap-2 rounded-xl border border-[#DCE8FA] bg-[#F8FBFF] px-4 py-2.5 text-xs font-semibold text-[#0052FF] hover:border-[#0052FF]"
           >
-            <Download className="h-4 w-4 text-[#00B8F4]" />
+            <Download className="h-4 w-4" />
             Download JSON Backup
           </button>
         </div>

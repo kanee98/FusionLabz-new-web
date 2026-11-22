@@ -9,8 +9,8 @@ const VERTEX_SHADER = `
   }
 `;
 
-// Refined volumetric studio light-field shader (Stripe / Apple Pro / Linear aesthetic)
-// Ultra-deep obsidian canvas with silky slow-moving titanium & subtle FusionLabz cyan light caustics
+// Stripe-inspired luminous multi-blue atmospheric silk shader
+// Blends crisp porcelain white with flowing sky-ice, FusionLabz cyan (#00B8F4), azure (#2563EB), and sapphire waves
 const FRAGMENT_SHADER = `
   precision highp float;
   varying vec2 vUv;
@@ -42,7 +42,7 @@ const FRAGMENT_SHADER = `
     mat2 rot = mat2(0.8, 0.6, -0.6, 0.8);
     for (int i = 0; i < 4; i++) {
       v += a * noise(p);
-      p = rot * p * 2.02;
+      p = rot * p * 1.98;
       a *= 0.5;
     }
     return v;
@@ -53,39 +53,34 @@ const FRAGMENT_SHADER = `
     float aspect = uResolution.x / max(uResolution.y, 1.0);
     vec2 p = (uv - 0.5) * vec2(aspect, 1.0);
 
-    float t = uTime * 0.075;
-    float scrollDrift = uScroll * 2.1;
+    float t = uTime * 0.085;
+    float scrollShift = uScroll * 1.85;
+    p -= uMouse * 0.06;
 
-    // Gentle parallax from pointer
-    p -= uMouse * 0.08;
-
-    // Flowing organic light fold
     vec2 q = vec2(
-      fbm(p * 1.15 + vec2(t, scrollDrift * 0.45)),
-      fbm(p * 1.15 + vec2(-t * 0.8 + 4.2, scrollDrift * 0.35 + 1.7))
+      fbm(p * 1.05 + vec2(t, scrollShift * 0.4)),
+      fbm(p * 1.05 + vec2(-t * 0.75 + 3.4, scrollShift * 0.3 + 2.1))
     );
 
-    float field = fbm(p * 1.35 + q * 1.45 + vec2(0.0, scrollDrift * 0.3));
+    float flow = fbm(p * 1.2 + q * 1.35 + vec2(0.0, scrollShift * 0.25));
 
-    // Studio horizon band sweeping elegantly across scroll chapters
-    float horizonY = 0.38 - sin(uScroll * 3.14159) * 0.28 + (field - 0.5) * 0.34;
-    float band = exp(-pow((uv.y - horizonY) * 3.1, 2.0));
-    float topGlow = exp(-pow(length((uv - vec2(0.5 + uMouse.x * 0.08, 0.96)) * vec2(1.1, 1.9)), 2.0));
+    // Luminous blue silk ribbons floating softly behind the crisp light canvas
+    vec3 porcelain = vec3(0.973, 0.985, 1.0);
+    vec3 skyIce    = vec3(0.835, 0.929, 1.0);
+    vec3 cyanGlow  = vec3(0.0, 0.722, 0.957);
+    vec3 azureBlue = vec3(0.145, 0.388, 0.922);
+    vec3 royalBlue = vec3(0.0, 0.322, 1.0);
 
-    // Palette: pure obsidian base, brushed steel slate, subtle surgical FusionLabz cyan
-    vec3 base = vec3(0.024, 0.028, 0.036);
-    vec3 steel = vec3(0.11, 0.14, 0.20);
-    vec3 cyan = vec3(0.0, 0.72, 0.96);
-    vec3 ice = vec3(0.75, 0.88, 0.98);
+    // Sweeping upper-right and lower-left silk waves that shift with scroll
+    float topWave = exp(-pow(length((uv - vec2(0.76 - uScroll * 0.25, 0.86)) * vec2(1.1, 1.4)), 2.0));
+    float leftWave = exp(-pow(length((uv - vec2(0.18 + uScroll * 0.2, 0.72 - uScroll * 0.15)) * vec2(1.15, 1.35)), 2.0));
+    float centerRibbon = exp(-pow((uv.y - (0.64 - uScroll * 0.28 + (flow - 0.5) * 0.35)) * 2.6, 2.0));
 
-    vec3 col = base;
-    col += steel * band * smoothstep(0.25, 0.85, field) * 0.72 * uIntensity;
-    col += cyan * band * smoothstep(0.46, 0.92, field) * 0.24 * uIntensity;
-    col += mix(cyan, ice, 0.55) * topGlow * 0.14 * uIntensity;
-
-    // Crisp radial vignette so text contrast stays immaculate
-    float vig = smoothstep(1.35, 0.25, length(p * 0.85));
-    col = mix(base, col, vig);
+    vec3 col = porcelain;
+    col = mix(col, skyIce, smoothstep(0.28, 0.82, flow) * 0.68 * uIntensity);
+    col = mix(col, cyanGlow, topWave * smoothstep(0.32, 0.85, flow) * 0.30 * uIntensity);
+    col = mix(col, azureBlue, leftWave * smoothstep(0.35, 0.88, flow) * 0.22 * uIntensity);
+    col = mix(col, mix(cyanGlow, royalBlue, uv.x), centerRibbon * 0.14 * uIntensity);
 
     gl_FragColor = vec4(col, 1.0);
   }
@@ -123,7 +118,7 @@ export function CosmicCanvas({ intensity = 'hero' }: { intensity?: 'hero' | 'amb
       uScroll: { value: 0 },
       uMouse: { value: new THREE.Vector2(0, 0) },
       uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-      uIntensity: { value: intensity === 'hero' ? 1.0 : 0.62 },
+      uIntensity: { value: intensity === 'hero' ? 1.0 : 0.72 },
     };
 
     const geometry = new THREE.PlaneGeometry(2, 2);

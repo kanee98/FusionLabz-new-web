@@ -82,62 +82,73 @@ export function ContactPage({ settings }: { settings: SiteSettings | null }) {
   };
 
   return (
-    <div ref={containerRef} className="relative z-10 min-h-screen pt-32 pb-24">
+    <div ref={containerRef} className="relative z-10 min-h-screen pt-36 pb-24">
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
-        <div className="grid gap-16 lg:grid-cols-12">
-          {/* Left Column: Clean Direct Contact */}
+        <div className="grid gap-14 lg:grid-cols-12">
+          {/* Left Column */}
           <div className="contact-fade lg:col-span-5">
-            <div className="text-xs font-medium tracking-wide text-[#00B8F4]">Contact</div>
-            <h1 className="mt-3 font-display text-4xl leading-[1.06] font-medium tracking-[-0.04em] text-white sm:text-5xl">
-              Let’s talk about your next build.
+            <div className="text-xs font-semibold tracking-wide text-[#0052FF]">Contact</div>
+            <h1 className="mt-3 font-display text-4xl leading-[1.06] font-semibold tracking-[-0.04em] text-[#09152B] sm:text-5xl">
+              Let’s talk about your{' '}
+              <span className="bg-gradient-to-r from-[#0052FF] to-[#00B8F4] bg-clip-text text-transparent">
+                next build.
+              </span>
             </h1>
-            <p className="mt-5 text-base leading-relaxed text-[#8A909E]">
+            <p className="mt-5 text-base leading-relaxed text-[#475569]">
               Share a short overview of what you’re building. Our engineering directors reply within
               one business day with clear next steps.
             </p>
 
-            <div className="mt-12 space-y-6 border-t border-white/[0.08] pt-8 text-sm">
+            <div className="mt-10 space-y-5 rounded-2xl border border-[#DCE8FA] bg-white/90 p-7 text-sm shadow-sm backdrop-blur-md">
               <a
                 href={`mailto:${settings?.email || 'hello@fusionlabz.lk'}`}
-                className="flex items-center gap-3.5 text-[#C4CAD4] transition-colors hover:text-white"
+                className="flex items-center gap-3.5 font-medium text-[#09152B] transition-colors hover:text-[#0052FF]"
               >
-                <Mail className="h-4 w-4 text-[#00B8F4]" />
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#EFF6FF] text-[#0052FF]">
+                  <Mail className="h-4 w-4" />
+                </span>
                 <span>{settings?.email || 'hello@fusionlabz.lk'}</span>
               </a>
 
               <a
                 href={`tel:${(settings?.phone || '+94774508890').replace(/\s+/g, '')}`}
-                className="flex items-center gap-3.5 text-[#C4CAD4] transition-colors hover:text-white"
+                className="flex items-center gap-3.5 font-medium text-[#09152B] transition-colors hover:text-[#0052FF]"
               >
-                <Phone className="h-4 w-4 text-[#00B8F4]" />
+                <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#EFF6FF] text-[#0052FF]">
+                  <Phone className="h-4 w-4" />
+                </span>
                 <span>{settings?.phone || '+94 77 450 8890'}</span>
               </a>
 
-              <div className="flex items-start gap-3.5 text-[#8A909E]">
-                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#00B8F4]" />
-                <span>{settings?.address || 'Level 08, Orion City IT Park, Colombo 09, Sri Lanka'}</span>
+              <div className="flex items-start gap-3.5 text-[#52627A]">
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#EFF6FF] text-[#0052FF]">
+                  <MapPin className="h-4 w-4" />
+                </span>
+                <span className="pt-1 leading-relaxed">
+                  {settings?.address || 'Level 08, Orion City IT Park, Colombo 09, Sri Lanka'}
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Clean Project Brief Form */}
+          {/* Right Column: Elevated Form Card */}
           <div className="contact-fade lg:col-span-7">
-            <div className="rounded-2xl border border-white/[0.09] bg-[#0B0D12]/90 p-6 backdrop-blur-xl sm:p-10">
+            <div className="rounded-2xl border border-[#DCE8FA] bg-white p-6 shadow-[0_24px_60px_-24px_rgba(9,21,43,0.12)] sm:p-10">
               {ticket ? (
                 <div className="py-12 text-center">
-                  <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-400" />
-                  <h2 className="mt-4 font-display text-2xl font-medium text-white">
+                  <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-500" />
+                  <h2 className="mt-4 font-display text-2xl font-semibold text-[#09152B]">
                     Message received
                   </h2>
-                  <p className="mx-auto mt-2 max-w-sm text-sm text-[#8A909E]">
+                  <p className="mx-auto mt-2 max-w-sm text-sm text-[#52627A]">
                     Thank you for reaching out. Your reference number is{' '}
-                    <span className="font-medium text-white">{ticket}</span>. We’ll be in touch
-                    shortly.
+                    <span className="font-semibold text-[#0052FF]">{ticket}</span>. We’ll be in
+                    touch shortly.
                   </p>
                   <button
                     type="button"
                     onClick={() => setTicket('')}
-                    className="mt-7 rounded-full border border-white/15 px-6 py-2.5 text-sm font-medium text-white hover:border-white/35"
+                    className="mt-7 rounded-full border border-[#DCE8FA] px-6 py-2.5 text-sm font-medium text-[#09152B] hover:border-[#0052FF] hover:text-[#0052FF]"
                   >
                     Send another message
                   </button>
@@ -155,13 +166,13 @@ export function ContactPage({ settings }: { settings: SiteSettings | null }) {
                   />
 
                   {error && (
-                    <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-xs text-red-300">
+                    <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-xs text-red-700">
                       {error}
                     </div>
                   )}
 
                   <div>
-                    <label className="mb-2.5 block text-xs font-medium text-[#A3AAB8]">
+                    <label className="mb-2.5 block text-xs font-semibold text-[#334155]">
                       How can we help?
                     </label>
                     <div className="flex flex-wrap gap-2">
@@ -174,8 +185,8 @@ export function ContactPage({ settings }: { settings: SiteSettings | null }) {
                             onClick={() => toggleService(srv)}
                             className={`rounded-full px-3.5 py-1.5 text-xs font-medium transition-colors ${
                               selected
-                                ? 'bg-white text-[#060709]'
-                                : 'border border-white/10 text-[#8A909E] hover:border-white/25 hover:text-white'
+                                ? 'bg-[#0052FF] text-white shadow-sm'
+                                : 'border border-[#DCE8FA] bg-[#F8FBFF] text-[#475569] hover:border-[#0052FF]/40 hover:text-[#0052FF]'
                             }`}
                           >
                             {srv}
@@ -187,7 +198,7 @@ export function ContactPage({ settings }: { settings: SiteSettings | null }) {
 
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div>
-                      <label className="mb-1.5 block text-xs font-medium text-[#A3AAB8]">
+                      <label className="mb-1.5 block text-xs font-medium text-[#334155]">
                         Full name *
                       </label>
                       <input
@@ -196,11 +207,11 @@ export function ContactPage({ settings }: { settings: SiteSettings | null }) {
                         value={fullName}
                         onChange={(e) => setFullName(e.target.value)}
                         placeholder="Jane Doe"
-                        className="w-full rounded-xl border border-white/10 bg-[#060709] px-3.5 py-2.5 text-sm text-white placeholder-[#525866]"
+                        className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B] placeholder-slate-400"
                       />
                     </div>
                     <div>
-                      <label className="mb-1.5 block text-xs font-medium text-[#A3AAB8]">
+                      <label className="mb-1.5 block text-xs font-medium text-[#334155]">
                         Work email *
                       </label>
                       <input
@@ -209,11 +220,11 @@ export function ContactPage({ settings }: { settings: SiteSettings | null }) {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         placeholder="jane@company.com"
-                        className="w-full rounded-xl border border-white/10 bg-[#060709] px-3.5 py-2.5 text-sm text-white placeholder-[#525866]"
+                        className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B] placeholder-slate-400"
                       />
                     </div>
                     <div>
-                      <label className="mb-1.5 block text-xs font-medium text-[#A3AAB8]">
+                      <label className="mb-1.5 block text-xs font-medium text-[#334155]">
                         Company
                       </label>
                       <input
@@ -221,11 +232,11 @@ export function ContactPage({ settings }: { settings: SiteSettings | null }) {
                         value={company}
                         onChange={(e) => setCompany(e.target.value)}
                         placeholder="Company name"
-                        className="w-full rounded-xl border border-white/10 bg-[#060709] px-3.5 py-2.5 text-sm text-white placeholder-[#525866]"
+                        className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B] placeholder-slate-400"
                       />
                     </div>
                     <div>
-                      <label className="mb-1.5 block text-xs font-medium text-[#A3AAB8]">
+                      <label className="mb-1.5 block text-xs font-medium text-[#334155]">
                         Phone
                       </label>
                       <input
@@ -233,20 +244,20 @@ export function ContactPage({ settings }: { settings: SiteSettings | null }) {
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="+94 77 000 0000"
-                        className="w-full rounded-xl border border-white/10 bg-[#060709] px-3.5 py-2.5 text-sm text-white placeholder-[#525866]"
+                        className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B] placeholder-slate-400"
                       />
                     </div>
                   </div>
 
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div>
-                      <label className="mb-1.5 block text-xs font-medium text-[#A3AAB8]">
+                      <label className="mb-1.5 block text-xs font-medium text-[#334155]">
                         Estimated budget
                       </label>
                       <select
                         value={budget}
                         onChange={(e) => setBudget(e.target.value)}
-                        className="w-full rounded-xl border border-white/10 bg-[#060709] px-3.5 py-2.5 text-sm text-white"
+                        className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
                       >
                         {BUDGET_OPTIONS.map((b) => (
                           <option key={b} value={b}>
@@ -256,13 +267,13 @@ export function ContactPage({ settings }: { settings: SiteSettings | null }) {
                       </select>
                     </div>
                     <div>
-                      <label className="mb-1.5 block text-xs font-medium text-[#A3AAB8]">
+                      <label className="mb-1.5 block text-xs font-medium text-[#334155]">
                         Timeline
                       </label>
                       <select
                         value={timeline}
                         onChange={(e) => setTimeline(e.target.value)}
-                        className="w-full rounded-xl border border-white/10 bg-[#060709] px-3.5 py-2.5 text-sm text-white"
+                        className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B]"
                       >
                         {TIMELINE_OPTIONS.map((t) => (
                           <option key={t} value={t}>
@@ -274,7 +285,7 @@ export function ContactPage({ settings }: { settings: SiteSettings | null }) {
                   </div>
 
                   <div>
-                    <label className="mb-1.5 block text-xs font-medium text-[#A3AAB8]">
+                    <label className="mb-1.5 block text-xs font-medium text-[#334155]">
                       Project details *
                     </label>
                     <textarea
@@ -283,16 +294,16 @@ export function ContactPage({ settings }: { settings: SiteSettings | null }) {
                       value={message}
                       onChange={(e) => setMessage(e.target.value)}
                       placeholder="Tell us about your goals, timeline, and any technical context..."
-                      className="w-full rounded-xl border border-white/10 bg-[#060709] px-3.5 py-2.5 text-sm text-white placeholder-[#525866]"
+                      className="w-full rounded-xl border border-slate-200 bg-[#F8FBFF] px-3.5 py-2.5 text-sm text-[#09152B] placeholder-slate-400"
                     />
                   </div>
 
                   <div className="flex items-center justify-between pt-2">
-                    <span className="text-xs text-[#6B7280]">NDA available on request</span>
+                    <span className="text-xs text-slate-500">NDA available on request</span>
                     <button
                       type="submit"
                       disabled={submitting}
-                      className="rounded-full bg-white px-7 py-3 text-sm font-medium text-[#060709] transition-colors hover:bg-[#E6ECF5] disabled:opacity-50"
+                      className="rounded-full bg-[#0052FF] px-7 py-3 text-sm font-medium text-white shadow-[0_10px_25px_-8px_rgba(0,82,255,0.5)] transition-colors hover:bg-[#0040CC] disabled:opacity-50"
                     >
                       {submitting ? 'Sending...' : 'Send message'}
                     </button>
