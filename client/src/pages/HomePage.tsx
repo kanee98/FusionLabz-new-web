@@ -27,7 +27,7 @@ const SERVICES = [
     num: '02',
     title: 'Windows Desktop Applications',
     summary:
-      'Fast, offline-capable desktop software engineered with SQL Server—such as our Gym Workout Scheduler and CCTV Access Control suite.',
+      'Fast, offline-capable desktop software engineered with SQL Server, including our Gym Workout Scheduler and CCTV Access Control suite.',
   },
   {
     num: '03',
@@ -510,7 +510,7 @@ export function HomePage({
       </section>
 
       {/* =================================================================== */}
-      {/* 3. CAPABILITIES — GLACIER BLUE INDEX WITH ANIMATED SCROLL RAIL      */}
+      {/* 3. CAPABILITIES - GLACIER BLUE INDEX WITH ANIMATED SCROLL RAIL      */}
       {/* =================================================================== */}
       <section className="relative border-t border-[#DCE8FA] bg-[#F2F7FF] py-28 sm:py-36">
         <div className="mx-auto max-w-6xl px-6 lg:px-8">
@@ -572,7 +572,7 @@ export function HomePage({
       </section>
 
       {/* =================================================================== */}
-      {/* 4. SELECTED WORK — VELOCITY-RESPONSIVE SAPPHIRE HORIZONTAL GALLERY  */}
+      {/* 4. SELECTED WORK - VELOCITY-RESPONSIVE SAPPHIRE HORIZONTAL GALLERY  */}
       {/* =================================================================== */}
       <section
         ref={gallerySectionRef}

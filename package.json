@@ -1,7 +1,7 @@
 {
   "name": "fusionlabz-platform",
   "version": "1.0.0",
-  "description": "FusionLabz — High-Tech Software Engineering Platform & Admin CMS",
+  "description": "FusionLabz Software Engineering Platform & Admin CMS",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

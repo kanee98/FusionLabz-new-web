@@ -61,7 +61,7 @@ function createSeedData() {
         solution:
           'Engineered a persistent facial recognition Windows desktop application backed by SQL Server Express (`\\SQLEXPRESS`) that monitors live stacked IP camera streams, tracks faces continuously, logs detections to a searchable database, and instantly splits recognized individuals into Paid Members and Unpaid / Expired alert panels.',
         impact:
-          'Stops unauthorized and expired-membership entry in real time without turnstiles or RFID cards—giving reception teams instant visual clarity across 2-camera live CCTV feeds and complete detection history logs.',
+          'Stops unauthorized and expired-membership entry in real time without turnstiles or RFID cards, giving reception teams instant visual clarity across 2-camera live CCTV feeds and complete detection history logs.',
         techStack: ['Windows Desktop', 'Python / OpenCV', 'Deep Face Recognition', 'RTSP IP CCTV', 'SQL Server Express', 'Real-Time Alerts'],
         metrics: [
           { label: 'Live Monitoring', value: 'Multi-Cam' },
@@ -109,7 +109,7 @@ function createSeedData() {
       {
         id: 'prj_bizwise',
         slug: 'bizwise-lk',
-        title: 'BizWise — AI & Analytics Platform',
+        title: 'BizWise: AI & Analytics Platform',
         type: 'Portfolio Project',
         category: 'AI & Data',
         clientName: 'BizWise',
@@ -139,7 +139,7 @@ function createSeedData() {
       {
         id: 'prj_mavix',
         slug: 'mavix-lk',
-        title: 'Mavix — Digital Growth Agency',
+        title: 'Mavix: Digital Growth Agency',
         type: 'Portfolio Project',
         category: 'Web & SaaS',
         clientName: 'Mavix',
@@ -169,7 +169,7 @@ function createSeedData() {
       {
         id: 'prj_propwise',
         slug: 'propwise-lk',
-        title: 'PropWise — Real Estate Discovery',
+        title: 'PropWise: Real Estate Discovery',
         type: 'Portfolio Project',
         category: 'Web & SaaS',
         clientName: 'PropWise',
@@ -199,7 +199,7 @@ function createSeedData() {
       {
         id: 'prj_pearlvoyagers',
         slug: 'pearlvoyagers-com',
-        title: 'Pearl Voyagers — Bespoke Sri Lanka Travel',
+        title: 'Pearl Voyagers: Bespoke Sri Lanka Travel',
         type: 'Portfolio Project',
         category: 'Web & SaaS',
         clientName: 'Pearl Voyagers',
@@ -266,7 +266,7 @@ function createSeedData() {
         logoUrl: '',
         featured: true,
         quote:
-          'They gave our real estate platform the clarity and structure buyers expect—making verified residential and commercial listings effortless to browse.',
+          'They gave our real estate platform the clarity and structure buyers expect, making verified residential and commercial listings effortless to browse.',
         authorName: 'PropWise Team',
         authorRole: 'propwise.lk',
         impactMetric: 'Verified Property Discovery',

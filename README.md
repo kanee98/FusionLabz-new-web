@@ -1,4 +1,4 @@
-# FusionLabz — Production Website & Private Admin Console
+# FusionLabz: Production Website & Private Admin Console
 
 Official launch-ready platform for **FusionLabz** (Kandy, Sri Lanka) featuring flagship products (**CCTV Face Tracking System**, **Gym Schedules System**), client showcase (**BizWise**, **Mavix**, **PropWise**, **Pearl Voyagers**), Careers with CV upload, Contact Inquiries, **MySQL + JSON dual database engine**, and a **stealth security-hardened Admin Console**.
 

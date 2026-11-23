@@ -463,7 +463,7 @@ export function CareersPage({ jobs }: { jobs: Job[] }) {
 
                 <div>
                   <label className="mb-1.5 block text-xs font-medium text-[#334155]">
-                    Resume / CV (PDF, DOC, DOCX — max 6MB)
+                    Resume / CV (PDF, DOC, DOCX, max 6MB)
                   </label>
                   {resumeFile ? (
                     <div className="flex items-center justify-between rounded-xl border border-[#BFDBFE] bg-[#EFF6FF] px-4 py-3">

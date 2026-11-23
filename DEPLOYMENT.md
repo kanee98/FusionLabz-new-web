@@ -6,7 +6,7 @@ This platform is launch-ready for shared Node.js hosting with **real MySQL datab
 
 ## 1. Database Setup (MySQL on cPanel / Shared Hosting)
 
-You do **not** need to run manual SQL migrations — once MySQL credentials are in `.env`, the server automatically creates all 8 tables (`server/schema.sql`) and seeds your real FusionLabz products, clients, and settings on first boot.
+You do **not** need to run manual SQL migrations. Once MySQL credentials are in `.env`, the server automatically creates all 8 tables (`server/schema.sql`) and seeds your real FusionLabz products, clients, and settings on first boot.
 
 1. Open **cPanel → MySQL Databases** (or **MySQL Database Wizard**).
 2. Create a database (e.g. `fusionla_web`) and a database user with a strong password.
@@ -20,7 +20,7 @@ You do **not** need to run manual SQL migrations — once MySQL credentials are 
 ## 2. Security Configuration (Important Before Going Live!)
 
 Never expose a guessable `/admin` URL. This platform enforces multi-layer security:
-- **Stealth Console Path (`ADMIN_PATH`):** Public `/admin` and `/api/admin/*` return `404 Not Found`. Your real console URL is set via `ADMIN_PATH` in `.env` (default: `/flz-console-84k2` — customize this to your own secret slug like `/flz-ops-93x7`). The secret path is never compiled into the public frontend JavaScript bundle.
+- **Stealth Console Path (`ADMIN_PATH`):** Public `/admin` and `/api/admin/*` return `404 Not Found`. Your real console URL is set via `ADMIN_PATH` in `.env` (default: `/flz-console-84k2`; customize this to your own secret slug like `/flz-ops-93x7`). The secret path is never compiled into the public frontend JavaScript bundle.
 - **Brute-Force Lockout & Audit Log:** 5 consecutive failed logins lock that IP + email for 15 minutes and log the attempt inside **Settings → Security Audit Log**.
 - **CSRF + Cookie Hardening:** `httpOnly`, `SameSite=Strict`, `Secure` cookies (on HTTPS), plus strict Same-Origin CSRF checks on all state-changing admin requests.
 - **File Upload Protection:** Magic-byte signature verification blocks spoofed executables disguised as images or PDFs; resumes are stored privately outside static hosting and require admin authentication to download.
@@ -71,7 +71,7 @@ Because `client/dist/` is committed to Git, you do **not** need to build Vite on
    - `DB_NAME=<cpanel_db_name>`
    - `DB_USER=<cpanel_db_user>`
    - `DB_PASSWORD=<cpanel_db_password>`
-7. Click **SAVE**, then click **Run NPM Install** (installs only lightweight root backend packages — fast & low RAM).
+7. Click **SAVE**, then click **Run NPM Install** (installs only lightweight root backend packages, fast & low RAM).
 8. Click **RESTART**.
 9. Visit `https://fusionlabz.lk/api/health` to confirm `"status": "ok"` and `"database": "mysql"`!
 
@@ -80,5 +80,5 @@ Because `client/dist/` is committed to Git, you do **not** need to build Vite on
 ## 5. Accessing Your Private Admin Console
 
 - Navigate directly to: `https://yourdomain.com<ADMIN_PATH>` (default locally: `http://localhost:3000/flz-console-84k2`).
-- Bookmark this URL privately — there are zero public links to it on the website.
+- Bookmark this URL privately. There are zero public links to it on the website.
 - Add your **WhatsApp number** and optional **SMTP settings** under **Site & Security** inside the console.

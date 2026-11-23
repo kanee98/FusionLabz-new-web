@@ -979,7 +979,7 @@ function InquiryCard({
             )}
           </div>
           <h3 className="mt-1 font-display text-xl font-semibold text-[#09152B]">
-            {inq.fullName} {inq.company ? `— ${inq.company}` : ''}
+            {inq.fullName} {inq.company ? `(${inq.company})` : ''}
           </h3>
           <div className="mt-1 flex flex-wrap gap-3 text-xs text-[#52627A]">
             <a href={`mailto:${inq.email}`} className="font-medium text-[#0052FF] hover:underline">

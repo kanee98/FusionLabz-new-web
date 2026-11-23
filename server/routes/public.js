@@ -219,7 +219,7 @@ router.post('/careers/apply', submissionLimiter, uploadResume.single('resume'), 
     await db.createApplication(application);
 
     sendNotification({
-      subject: `[FusionLabz Careers] ${application.fullName} — ${application.jobTitle}`,
+      subject: `[FusionLabz Careers] ${application.fullName} - ${application.jobTitle}`,
       replyTo: application.email,
       html: `
         <div style="font-family:sans-serif;background:#f8fbff;color:#09152b;padding:24px;border-radius:12px;">
